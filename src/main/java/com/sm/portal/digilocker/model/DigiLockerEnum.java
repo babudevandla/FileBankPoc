@@ -3,7 +3,9 @@ package com.sm.portal.digilocker.model;
 public enum DigiLockerEnum {
 
 	LOCKER(1,"LOCKER"),
-	GALLERY(2,"GALLERY");
+	GALLERY(2,"GALLERY"),
+	EDAIRY(3,"EDAIRY"),
+	EBOOK(4,"EBOOK");
 	
 	private int	id;
 	private String status;

@@ -20,6 +20,7 @@ import com.sm.portal.digilocker.model.FolderInfo;
 import com.sm.portal.digilocker.model.GalleryDetails;
 import com.sm.portal.digilocker.mongo.dao.DigiLockerMongoDao;
 import com.sm.portal.digilocker.utils.DigiLockeUtils;
+import com.sm.portal.filters.ThreadLocalInfoContainer;
 import com.sm.portal.service.FileUploadServices;
 import com.sm.portal.uniquekeys.UniqueKeyDaoImpl;
 import com.sm.portal.uniquekeys.UniqueKeyEnum;
@@ -108,9 +109,9 @@ public class DigilockerServiceImpl implements DigilockerService{
 
 
 	@Override
-	public FolderInfo getGalleryDetails(Integer userId) {
+	public FolderInfo getGalleryDetails(String origin) {
 
-		FolderInfo gallery = digiLockerMongoDao.getGalleryDetails(userId);
+		FolderInfo gallery = digiLockerMongoDao.getGalleryDetails(origin);
 		
 		return gallery;
 	}//getGalleryDetails() closinig
@@ -163,45 +164,55 @@ public class DigilockerServiceImpl implements DigilockerService{
 
 	@Override
 	public String uploadFiles(MultipartFile multipart, Integer userid, String folderPath, Integer folderId, HttpServletRequest request) {
-
-		String fileName = multipart.getOriginalFilename();
-		String filePath = folderPath+fileName.replaceAll(" ", "_");
 		
 		String fileURL=fileUploadServices.uploadWebDavServer(multipart,folderPath, request);
+		if(fileURL!=null){
+			this.storeFilesInFileBank(multipart, folderPath, folderId);
+		}
+		return fileURL;
+	}//uploadFiles() closing
+
+	@Override
+	public void storeFilesInFileBank(MultipartFile multipart, String folderPath, Integer folderId){
+		String fileName = multipart.getOriginalFilename();
+		String filePath = folderPath+fileName.replaceAll(" ", "_");
+		Integer userId=(Integer) (ThreadLocalInfoContainer.INFO_CONTAINER.get()).get("USER_ID");
+		
 		String fileType =digiLockerUtils.getFileType(multipart);
 		String fileExtension=fileName.substring(fileName.lastIndexOf(".")+1);
-		int	fileUniqueKey=uniqueKeyDaoImpl.getUniqueKey(userid, UniqueKeyEnum.FILES_ID.toString(), 1);
-		if(fileURL!=null){
-			
-			FilesInfo newFileInfo = new FilesInfo();
-			newFileInfo.setFileId(++fileUniqueKey);
-			newFileInfo.setFileName(fileName);
-			newFileInfo.setDumy_filename(fileName.replaceAll(" ", "_"));
-			newFileInfo.setFilePath(filePath);
-			newFileInfo.setFileStatus(DigiLockerStatusEnum.ACTIVE.toString());
-			newFileInfo.setCreateddate(new Date());
-			newFileInfo.setStatusAtGallery(DigiLockerStatusEnum.ACTIVE.toString());
-			newFileInfo.setFileType(fileType);
-			newFileInfo.setFileExtension(fileExtension);
-			FolderInfo newFolder = new FolderInfo();
-			
-			List<FilesInfo> localFilesInfo = new ArrayList<>();
-			localFilesInfo.add(newFileInfo);
-			newFolder.setLocalFilesInfo(localFilesInfo);
-			
-			digilockerService.storeNewFileOrFolderInfo(newFolder, folderId, userid);
-		}
+		int	fileUniqueKey=uniqueKeyDaoImpl.getUniqueKey(userId, UniqueKeyEnum.FILES_ID.toString(), 1);
 		
-		return fileURL;
-	}
-
+		
+		FilesInfo newFileInfo = new FilesInfo();
+		newFileInfo.setFileId(++fileUniqueKey);
+		newFileInfo.setFileName(fileName);
+		newFileInfo.setDumy_filename(fileName.replaceAll(" ", "_"));
+		newFileInfo.setFilePath(filePath);
+		newFileInfo.setFileStatus(DigiLockerStatusEnum.ACTIVE.toString());
+		newFileInfo.setCreateddate(new Date());
+		newFileInfo.setStatusAtGallery(DigiLockerStatusEnum.ACTIVE.toString());
+		newFileInfo.setFileType(fileType);
+		newFileInfo.setFileExtension(fileExtension);
+		FolderInfo newFolder = new FolderInfo();
+		
+		List<FilesInfo> localFilesInfo = new ArrayList<>();
+		localFilesInfo.add(newFileInfo);
+		newFolder.setLocalFilesInfo(localFilesInfo);
+		
+		digilockerService.storeNewFileOrFolderInfo(newFolder, folderId, userId);
+		
+		
+		
+	}//storeFilesInFileBank() cloisng
 
 	@Override
 	public void storeFilesInGalleryFromDigiLocker(Integer userId, Integer folderId, MultipartFile[] multipartList, HttpServletRequest request) {
 
-		FolderInfo gallery =digilockerService.getGalleryDetails(userId);
+		//FolderInfo gallery =digilockerService.getGalleryDetails(userId);
+		FolderInfo gallery =digilockerService.getGalleryDetails(DigiLockerEnum.GALLERY.toString());
 		if(gallery==null){
-			gallery =this.checkAndCreateGalleryFolder(userId);
+			//gallery =this.checkAndCreateGalleryFolder(userId);
+			gallery =this.checkAndCreateGalleryFolder(DigiLockerEnum.GALLERY.toString());
 		}
 		String fileURL=null;
 		List<FilesInfo> newFileList = new ArrayList<>();
@@ -236,20 +247,31 @@ public class DigilockerServiceImpl implements DigilockerService{
 	}//storeFilesInGalleryFromDigiLocker() closing
 
 
-	@SuppressWarnings("null")
-	private synchronized FolderInfo checkAndCreateGalleryFolder(Integer userId) {
+	//private synchronized FolderInfo checkAndCreateGalleryFolder(Integer userId) {
+	@Override
+	public synchronized FolderInfo checkAndCreateGalleryFolder(String origin) {
 		
-		FolderInfo gallery =digilockerService.getGalleryDetails(userId);
+		Integer userId=(Integer) (ThreadLocalInfoContainer.INFO_CONTAINER.get()).get("USER_ID");
+		//FolderInfo gallery =digilockerService.getGalleryDetails(userId);
+		FolderInfo gallery =digilockerService.getGalleryDetails(origin);
+		String foldername =null;
 		if(gallery!=null){
 			return gallery;
 		}else{
 			
+			if(origin.equals(DigiLockerEnum.GALLERY.toString())){
+				foldername="Gallery";
+			}else if(origin.equals(DigiLockerEnum.EDAIRY.toString())){
+				foldername="Edairy";
+			}else if(origin.equals(DigiLockerEnum.EBOOK.toString())){
+				foldername="Ebook";
+			}
 			gallery =new FolderInfo();
 			int newFolderId=uniqueKeyDaoImpl.getUniqueKey(userId, UniqueKeyEnum.FOLDER_ID.toString(), 1);
 			fileUploadServices.createFolderName("/"+userId+"/"+newFolderId+"/");
 			
 			gallery.setfId(++newFolderId);
-			String foldername ="Gallery";
+			
 			gallery.setfName(foldername);
 			
 			gallery.setParentId(0);
@@ -258,7 +280,8 @@ public class DigilockerServiceImpl implements DigilockerService{
 			gallery.setFolderStatus(DigiLockerStatusEnum.ACTIVE.toString());
 			gallery.setChildFolders(null);
 			gallery.setLocalFilesInfo(null);
-			gallery.setOrigin(DigiLockerEnum.GALLERY.toString());
+			//gallery.setOrigin(DigiLockerEnum.GALLERY.toString());
+			gallery.setOrigin(origin);
 			digilockerService.storeNewFileOrFolderInfo(gallery, new Integer(""+gallery.getfId()), userId);
 			return gallery;
 		}

@@ -28,6 +28,7 @@ import com.sm.portal.digilocker.model.FilesInfo;
 import com.sm.portal.digilocker.model.FolderInfo;
 import com.sm.portal.digilocker.model.FolderInfoVo;
 import com.sm.portal.digilocker.model.GalleryDetails;
+import com.sm.portal.filters.ThreadLocalInfoContainer;
 import com.sm.portal.mongo.MongoDBUtil;
 
 
@@ -457,19 +458,22 @@ public class DigiLockerMongoDao {
 		return details;
 	}
 
-	public FolderInfo getGalleryDetails(Integer userId) {
+	//public FolderInfo getGalleryDetails(Integer userId) {
+		public FolderInfo getGalleryDetails(String origin) {
 
+		Integer userId=(Integer) (ThreadLocalInfoContainer.INFO_CONTAINER.get()).get("USER_ID");
 		FolderInfo gallerFolder = null;
 		MongoCollection<Document> coll = null;
 		coll = mongoDBUtil.getMongoCollection(CollectionsConstant.DIGILOCKER_MONGO_COLLETION);
-		Bson filter = Filters.and(Filters.eq("userId", userId), Filters.elemMatch("foldersList", new Document("origin",DigiLockerEnum.GALLERY.toString())));
+		Bson filter = Filters.and(Filters.eq("userId", userId), Filters.elemMatch("foldersList", new Document("origin",origin)));
 		FindIterable<Document> folderInfoVos=coll.find(filter);
 		if(null != folderInfoVos){
 			for (Document cur :  folderInfoVos ) {
 				FolderInfoVo folderInfoVo = gson.fromJson(cur.toJson(), FolderInfoVo.class);
 				List<FolderInfo> folderInfoList=folderInfoVo.getFoldersList();
 				for(FolderInfo folderInfo :folderInfoList){
-					if(folderInfo.getOrigin().equals(DigiLockerEnum.GALLERY.toString())){
+					//if(folderInfo.getOrigin().equals(DigiLockerEnum.GALLERY.toString())){
+					if(folderInfo.getOrigin().equals(origin)){
 						gallerFolder=folderInfo;
 						break;
 					}

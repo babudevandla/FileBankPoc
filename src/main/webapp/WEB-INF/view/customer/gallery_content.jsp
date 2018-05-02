@@ -56,8 +56,18 @@
 	             		<option value=""> --- Select File Origin ---</option>
 	             		<option value="LOCKER" >FILE BANK</option>
 	             		<option value="GALLERY">GALLERY</option>
-	             		<option value="E-BOOK">E-BOOK</option>
-	             		<option value="E-DAIRY">E-DAIRY</option>
+	             		<option value="EBOOK">E-BOOK</option>
+	             		<option value="EDAIRY">E-DAIRY</option>
+	             		
+	             		<%-- <core:forEach items="${fileOriginList}" var="origin">
+	             			 <core:choose>
+                                 <core:when test ="${fileOrigin eq  origin}">
+                                    <option value="${origin}">${origin}</option>
+                                 </core:when>
+                              </core:choose>
+                              <option value="${origin}">${origin}</option>
+                          </core:forEach>   --%>           		
+	             		
              		</select>
             	</div>
             	<div  class="col-md-9 col-sm-9" align="right" style="left: 103px;top: -18px;">

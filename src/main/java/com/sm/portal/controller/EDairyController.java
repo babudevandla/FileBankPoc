@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.sm.portal.constants.URLCONSTANT;
+import com.sm.portal.digilocker.model.DigiLockerEnum;
 import com.sm.portal.digilocker.model.DigiLockerStatusEnum;
 import com.sm.portal.digilocker.model.FilesInfo;
 import com.sm.portal.digilocker.model.FolderInfo;
@@ -227,7 +228,12 @@ public class EDairyController {
 			 @RequestParam("pagecontent") String pagecontent,
 			 @RequestParam("files") MultipartFile multipartList[],
 			 HttpServletRequest request) {
-		FolderInfo gallery =digilockerService.getGalleryDetails(userId);
+		//FolderInfo gallery =digilockerService.getGalleryDetails(userId);
+		FolderInfo gallery =digilockerService.getGalleryDetails(DigiLockerEnum.EDAIRY.toString());
+		if(gallery==null){
+			gallery =digilockerService.checkAndCreateGalleryFolder(DigiLockerEnum.EDAIRY.toString());
+		}
+		
 		String fileURL=null;
 		List<String> fileUrlList=new ArrayList<>();
 		List<FilesInfo> newFileList = new ArrayList<>();

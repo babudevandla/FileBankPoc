@@ -31,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.sm.portal.constants.URLCONSTANT;
 import com.sm.portal.constants.WebDavServerConstant;
 import com.sm.portal.digilocker.model.DigiLockerAddressBar;
+import com.sm.portal.digilocker.model.DigiLockerEnum;
 import com.sm.portal.digilocker.model.FolderInfo;
 import com.sm.portal.digilocker.model.GalleryDetails;
 import com.sm.portal.digilocker.service.DigilockerService;
@@ -389,7 +390,9 @@ public class FileManagementController  extends CommonController{
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		if(fileOrigin==null)mvc.addObject("fileOrigin", DigiLockerEnum.LOCKER.toString());
 		mvc.addObject("digiLockActive", true);
+		mvc.addObject("fileOriginList", DigiLockerEnum.values());
 		return mvc;
 	}//getGallerContent() closing
 	

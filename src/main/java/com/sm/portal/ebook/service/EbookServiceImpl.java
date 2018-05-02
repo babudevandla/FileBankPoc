@@ -2,7 +2,10 @@ package com.sm.portal.ebook.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.sm.portal.digilocker.model.FolderInfo;
+import com.sm.portal.digilocker.service.DigilockerService;
 import com.sm.portal.ebook.model.BookSearchDto;
 import com.sm.portal.ebook.model.Ebook;
 import com.sm.portal.ebook.model.EbookPage;
@@ -20,6 +23,8 @@ public class EbookServiceImpl implements EbookService{
 	
 	@Autowired
 	FileUploadServices fileUploadServices;
+	@Autowired
+	DigilockerService digilockerService;
 	
 	@Override
 	public UserBooks getEbookList(BookSearchDto searchDto) {
@@ -78,13 +83,15 @@ public class EbookServiceImpl implements EbookService{
 		ebookMongoDao.updateChapter(bookId,pageNo,chapterName,existingName ,userId);
 	}
 
-	public void updateBookCoverImg(Ebook eBook, String folderPath) {
+	public void updateBookCoverImg(Ebook eBook, FolderInfo folderInfo) {
 		String fileURL=null;
+		MultipartFile multipartFile=eBook.getCoverImg();
 		 if (!eBook.getCoverImg().isEmpty()) {
-			 fileURL =fileUploadServices.uploadWebDavServer2(eBook.getCoverImg(),folderPath);
+			 fileURL =fileUploadServices.uploadWebDavServer2(multipartFile,folderInfo.getFolderPath());
 		 }
 		 eBook.setCoverImage(fileURL);
 		 ebookMongoDao.updateBookCoverImg(eBook);
+		 digilockerService.storeFilesInFileBank(multipartFile, folderInfo.getFolderPath(), folderInfo.getFolderId());
 	}
 
 	public UserBooks getEbookListBySearch(BookSearchDto searchDto) {

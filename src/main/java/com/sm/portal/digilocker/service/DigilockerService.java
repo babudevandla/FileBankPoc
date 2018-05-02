@@ -32,7 +32,8 @@ public interface DigilockerService {
 
 	public void storeFilesInGallery(FolderInfo newFolderInfo, Integer userId);
 
-	public FolderInfo getGalleryDetails(Integer userId);
+	//public FolderInfo getGalleryDetails(Integer userId);
+	public FolderInfo getGalleryDetails(String origin);
 
 	public FolderInfo createNewFolder(Integer userid, String foldername, String currentFolderPath,
 			List<FolderInfo> allFolderList);
@@ -40,6 +41,10 @@ public interface DigilockerService {
 	public String uploadFiles(MultipartFile multipart, Integer userid, String folderPath, Integer folderId, HttpServletRequest request);
 
 	public void storeFilesInGalleryFromDigiLocker(Integer userId, Integer folderId, MultipartFile[] multipartList, HttpServletRequest request);
+
+	public FolderInfo checkAndCreateGalleryFolder(String origin);
+
+	public void storeFilesInFileBank(MultipartFile multipart, String folderPath, Integer folderId);
 
 
 }
