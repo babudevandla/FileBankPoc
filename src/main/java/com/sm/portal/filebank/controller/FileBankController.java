@@ -2,6 +2,8 @@ package com.sm.portal.filebank.controller;
 
 import java.security.Principal;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +23,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.sm.portal.constants.URLCONSTANT;
 import com.sm.portal.digilocker.model.GalleryDetails;
 import com.sm.portal.digilocker.service.DigilockerService;
+import com.sm.portal.ebook.model.EbookPageDto;
+import com.sm.portal.edairy.model.DairyPage;
+import com.sm.portal.edairy.model.EdairyActionEnum;
+import com.sm.portal.edairy.service.EdairyServiceImpl;
 import com.sm.portal.filters.ThreadLocalInfoContainer;
 
 @RestController
@@ -31,6 +37,9 @@ public class FileBankController {
 	
 	@Autowired
 	DigilockerService digilockerService;
+	
+	@Autowired
+	EdairyServiceImpl edairyServiceImpl;
 	
 	@GetMapping(value="/getFileBankList")
 	public ModelAndView getFileBankList(@RequestParam(name="userid", required=false) Integer userid,Principal principal,
@@ -98,19 +107,40 @@ public class FileBankController {
 	@PostMapping(value="/uploadFileBankFilesInCloud")
 	public ModelAndView uploadFiles(@RequestParam("filePaths") String filePaths[],Principal principal,
 			RedirectAttributes redirectAttributes, HttpServletRequest request){
-		logger.debug(" show fileManagement ...");
-		Integer userId = null;
-		try{
-			userId=(Integer) (ThreadLocalInfoContainer.INFO_CONTAINER.get()).get("USER_ID");
-		}catch(Exception e){e.printStackTrace();}
 		
-		ModelAndView mvc = new ModelAndView();
-		for(String str:filePaths){
-			System.out.println(str);
+		/**
+		 * id(dairy/ebook id), content, pageNo, filePaths[], actionType="EBOOK/EDAIRY(enum)"
+		 * 
+		 */
+		logger.debug(" show fileManagement ...");
+		Integer userId =(Integer) (ThreadLocalInfoContainer.INFO_CONTAINER.get()).get("USER_ID");
+		List<String> fileUrlList =edairyServiceImpl.getAbsoluteUrls(Arrays.asList(filePaths));
+		
+		if(fileUrlList.size()>0){
+			String updatedPageContent =edairyServiceImpl.getContentAfterFileUpload(dairyPage.getContent(), fileUrlList);			
 		}
 		
+		ModelAndView mvc= new ModelAndView();
+		EdairyActionEnum.EDIT_PAGE.toString();
+		if("Edairy") {//actiontype
+			DairyPage page=new DairyPage();
+			page.setPageNo(dairyPage.getPageNo());
+			page.setContent(updatedPageContent);
+			boolean result=edairyServiceImpl.savePageContent(userId, dairyId, page);
+			mvc.setViewName("redirect:/sm/getDairyInfo/"+userId+"/"+dairyId+"?actionBy="+EdairyActionEnum.EDIT_PAGE.toString()+"&defaultPageNo="+dairyPage.getPageNo()+"&edit="+"YES");
+			
+		}else {
+			EbookPageDto ebookPageDto =new EbookPageDto();
+			ebookPageDto.setUserId(userId);
+			ebookPageDto.setBookId(bookId);
+			ebookPageDto.setContent(updatedPageContent);
+			ebookPageDto.setPageNo(ebookPage.getPageNo());
+			
+			ebookServiceImple.saveEbookPageContent(ebookPageDto);
+			mvc.setViewName("redirect:/sm/editEbookContent?userId="+userId+"&bookId="+bookId+"&defaultPageNo="+ebookPage.getPageNo());
+		}
+			return mvc;
 		
-		return mvc;
 	}//uploadFiles() closing
 	
 }

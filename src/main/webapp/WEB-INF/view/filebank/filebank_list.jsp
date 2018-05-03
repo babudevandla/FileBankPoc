@@ -177,17 +177,6 @@
 	  }
   })
   
-  $('#fileBankFilesUpload').click(function(event){
-		event.preventDefault();
-		var r=confirm(" Are you sure want to upload cloud files ");
-		if(r){
-			var size=$("[name='filePaths']:checked").length;
-			if(size > 0){
-			 	$("#sellerimagebulkapprove").submit();
-			}else{
-				 alert('You should select atleast one file !');
-			}
-		}
-	});
+  
  
   </script>  
