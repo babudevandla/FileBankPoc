@@ -32,83 +32,86 @@
 	    </tbody>
     </table>
  
- <form:form action="${contextPath}/sm/saveEbookPageContent"  id="saveEbookPageId" method="post" modelAttribute="eBookPageDto">
- 	<%-- <form:hidden path="${userId}"/>
- 	<form:hidden path="${ dairyId}"/> --%>
- 	<input name="upload" type="button"	class="btn btn-primary uploadMultipleFiles1"  value="Uploadfiles" />
-	<textarea id="editor"  name="content">${eBook.defaultPage.content}</textarea><br/>
-	<input type="hidden" name="bookId" class="bookId" value="${eBook.bookId}">
-	<input type="hidden" name="userId" class="userId" value="${eBook.userId}">
-	<input type="hidden" name="pageNo" class="pageNo">
-	<input type="hidden" name="currentPageNo" class="pageNo">
-	 <!-- <input name="submit" type="submit"	class="btn btn-primary" value="Update" /> -->
-	 <input type="button" value="Update" id="saveEbookPageContentId"  class="btn btn-primary"  
-	  data-href="${contextPath}/sm/saveEbookPageContent" />
-</form:form>
+	 <form:form action="${contextPath}/sm/saveEbookPageContent"  id="saveEbookPageId" method="post" modelAttribute="eBookPageDto">
+	 	<%-- <form:hidden path="${userId}"/>
+	 	<form:hidden path="${ dairyId}"/> --%>
+	 	<input name="upload" type="button"	class="btn btn-primary uploadMultipleFiles1"  value="Uploadfiles" />
+	 	<button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList?userid=${userid}" class="fileBankWindowCls" style="margin-left: 50px;margin-top: -12px;">
+			<img alt="File Bank" src="${contextPath}/resources/default/images/filebank.ico" style="width: 25px;"> File Bank
+		</button>
+		<textarea id="editor"  name="content">${eBook.defaultPage.content}</textarea><br/>
+		<input type="hidden" name="bookId" class="bookId" value="${eBook.bookId}">
+		<input type="hidden" name="userId" class="userId" value="${eBook.userId}">
+		<input type="hidden" name="pageNo" class="pageNo">
+		<input type="hidden" name="currentPageNo" class="pageNo">
+		 <!-- <input name="submit" type="submit"	class="btn btn-primary" value="Update" /> -->
+		 <input type="button" value="Update" id="saveEbookPageContentId"  class="btn btn-primary"  
+		  data-href="${contextPath}/sm/saveEbookPageContent" />
+	</form:form>
 
-
-
-<div class="modal fade" id="UploadfilesModel" role="dialog">
-    <div class="modal-dialog">
-    <form action="${contextPath}/sm/storeFilesInGalleryFromEbook" id="storeFilesInGallery" enctype="multipart/form-data" method="post" >
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
-                <h4 class="modal-title filename"></h4>
-            </div>
-             <table id="fuTable"  border="1" style="margin-left: 25px;margin-top: 12px;">
-	    		<tr>
-	        		<td> 
-	        		<!-- <input name="files" type="file" multiple onchange="readURL(this);">
-	        			<img id="blah" src="#" alt="your image" /> -->
-	        			<input name="files" type="file" multiple>
-	        		</td>
-	   			 </tr>
-   		 </table>
- 		<br>
- 			<div align="right">
-       			<input  type="button" value="Add More File"  onclick="AddMoreFile('fuTable')" style="margin-top: -60px;">
-       		</div>
-            <div class="modal-body">
-				<input type="hidden" name="bookId" class="bookId">
-				<input type="hidden" name="userId" class="userId">
-				<input type="hidden" name="pageNo" class="pageNo">
-				<input type="hidden" name="bookPagecontent" id="pageContentIdVal">
-				<!-- <span id="pageContentId"></span> -->
-            </div>
-            <div class="modal-footer">
-            	 <button type="submit" class="btn btn-primary" id="" >Submit</button>
-                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-      </form>
-    </div>
-</div>
-
-<div class="modal fade" id="updateCptrName" role="dialog">
-    <div class="modal-dialog">
-    <form action="${contextPath}/sm/updateChapter" id="updateCptrNameFrom"  method="get" >
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
-                <h4 class="modal-title filename">Change Chapter Name</h4>
-            </div>
-            <div class="modal-body">
-            	<input type="text" name="newChapterName" id="chaptername" class="form-control" >
-				<input type="hidden" name="bookId" class="bookId">
-				<input type="hidden" name="userId" class="userId">
-				<input type="hidden" name="pageNo" class="pageNo">
-				<input type="hidden" name="existingName" class="existingName">
-            </div>
-            <div class="modal-footer">
-            	  <button type="submit" class="btn btn-primary changeCptrName" id="updateCptr" data-href="${contextPath}/sm/updateChapter" >Update</button>
-            	  <button type="submit" class="btn btn-primary changeCptrName" id="createCptr" data-href="${contextPath}/sm/createNewChapter">Create</button>
-                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-      </form>
-    </div>
-</div>
+	
+	
+	<div class="modal fade" id="UploadfilesModel" role="dialog">
+	    <div class="modal-dialog">
+	    <form action="${contextPath}/sm/storeFilesInGalleryFromEbook" id="storeFilesInGallery" enctype="multipart/form-data" method="post" >
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+	                <h4 class="modal-title filename"></h4>
+	            </div>
+	             <table id="fuTable"  border="1" style="margin-left: 25px;margin-top: 12px;">
+		    		<tr>
+		        		<td> 
+		        		<!-- <input name="files" type="file" multiple onchange="readURL(this);">
+		        			<img id="blah" src="#" alt="your image" /> -->
+		        			<input name="files" type="file" multiple>
+		        		</td>
+		   			 </tr>
+	   		 </table>
+	 		<br>
+	 			<div align="right">
+	       			<input  type="button" value="Add More File"  onclick="AddMoreFile('fuTable')" style="margin-top: -60px;">
+	       		</div>
+	            <div class="modal-body">
+					<input type="hidden" name="bookId" class="bookId">
+					<input type="hidden" name="userId" class="userId">
+					<input type="hidden" name="pageNo" class="pageNo">
+					<input type="hidden" name="bookPagecontent" id="pageContentIdVal">
+					<!-- <span id="pageContentId"></span> -->
+	            </div>
+	            <div class="modal-footer">
+	            	 <button type="submit" class="btn btn-primary" id="" >Submit</button>
+	                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	            </div>
+	        </div>
+	      </form>
+	    </div>
+	</div>
+	
+	<div class="modal fade" id="updateCptrName" role="dialog">
+	    <div class="modal-dialog">
+	    <form action="${contextPath}/sm/updateChapter" id="updateCptrNameFrom"  method="get" >
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+	                <h4 class="modal-title filename">Change Chapter Name</h4>
+	            </div>
+	            <div class="modal-body">
+	            	<input type="text" name="newChapterName" id="chaptername" class="form-control" >
+					<input type="hidden" name="bookId" class="bookId">
+					<input type="hidden" name="userId" class="userId">
+					<input type="hidden" name="pageNo" class="pageNo">
+					<input type="hidden" name="existingName" class="existingName">
+	            </div>
+	            <div class="modal-footer">
+	            	  <button type="submit" class="btn btn-primary changeCptrName" id="updateCptr" data-href="${contextPath}/sm/updateChapter" >Update</button>
+	            	  <button type="submit" class="btn btn-primary changeCptrName" id="createCptr" data-href="${contextPath}/sm/createNewChapter">Create</button>
+	                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	            </div>
+	        </div>
+	      </form>
+	    </div>
+	</div>
 
 <script type="text/javascript">
 $(document).ready(function () {
@@ -149,7 +152,7 @@ $(document).ready(function() {
 	        	keyboard: false,
 	        	show:true,
 	        	height:'100%',
-	        	width:'100%'
+	        	width:'50%'
 	  			});
 	  		});
 	  

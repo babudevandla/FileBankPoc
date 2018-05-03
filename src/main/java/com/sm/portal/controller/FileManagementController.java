@@ -353,7 +353,6 @@ public class FileManagementController  extends CommonController{
 			List<GalleryDetails> gallerylist = digilockerService.getGallerContent(userid, filesType,fileStatus);
 			if(fileOrigin!=null)
 				gallerylist=gallerylist.stream().filter( g -> fileOrigin.equals(g.getOrigin())).collect(Collectors.toList());
-			boolean filesTypeClr=false;
 			
 			mvc.addObject("galleryContent", gallerylist);
 			mvc.addObject("fileType", filesType);
@@ -363,9 +362,9 @@ public class FileManagementController  extends CommonController{
 			boolean audCls=false;
 			boolean vedCls=false;
 			boolean docCls=false;
-			
 			boolean recyleCls=false;
-			if(filesType.equals("ALL"))
+			
+			if(filesType.equals("ALL") && fileStatus==null)
 				allCls=true;
 			else if(filesType.equals("IMAGE"))
 				imgCls=true;
@@ -375,7 +374,8 @@ public class FileManagementController  extends CommonController{
 				vedCls=true;
 			else if(filesType.equals("DOCUMENT"))
 				docCls=true;
-			else if(fileStatus.equals("DELETED"))
+		 
+			if(fileStatus!=null && fileStatus.equals("DELETED"))
 				recyleCls=true;
 			
 			

@@ -52,7 +52,15 @@ body {
     cursor: pointer;
     margin-left: 10px;
 }
-
+.modal-dialog {
+  width: 75%;
+ }
+.modal-header {
+    background-color: #337AB7;
+    padding:16px 16px;
+    color:#FFF;
+    border-bottom:2px dashed #337AB7;
+ }
 </style>
 </head>
 <body>
@@ -203,10 +211,20 @@ body {
           <h4 class="modal-title">File Bank</h4>
         </div>
         <div class="modal-body" >
-          <div id="fileBankFilesList"></div>
+          <div id="fileBankFilesList" style=" margin-top: -15px"></div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary"  data-dismiss="modal">Ok</button>
+        <%-- <div class="media">
+         <div class="row js-masonry" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": ".grid-sizer", "percentPosition": true }'>
+	       	<form action="" id="sellerimagebulkapprove">
+		      	<div id="selectedFiles">
+          		 
+                 </div>
+	     	</form>
+     	   </div>
+     	</div> --%>
+          <button type="button" class="btn btn-primary" id="fileBankFilesUpload"  >Submit</button>
+            <button type="button" class="btn btn-primary"  data-dismiss="modal">Cancel</button>
         </div>
       </div>
       
@@ -243,6 +261,7 @@ body {
  $(document).ready(function() {
 	    $('#example').DataTable();
 	    $('#dynamic-table').DataTable();
+	    
 	} );
 	
 	

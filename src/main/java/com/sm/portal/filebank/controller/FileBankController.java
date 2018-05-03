@@ -11,10 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sm.portal.constants.URLCONSTANT;
 import com.sm.portal.digilocker.model.GalleryDetails;
@@ -60,7 +62,7 @@ public class FileBankController {
 			boolean docCls=false;
 			
 			boolean recyleCls=false;
-			if(filesType.equals("ALL"))
+			if(filesType.equals("ALL") && fileStatus==null)
 				allCls=true;
 			else if(filesType.equals("IMAGE"))
 				imgCls=true;
@@ -70,7 +72,8 @@ public class FileBankController {
 				vedCls=true;
 			else if(filesType.equals("DOCUMENT"))
 				docCls=true;
-			else if(fileStatus.equals("DELETED"))
+			
+			if(fileStatus!=null && fileStatus.equals("DELETED"))
 				recyleCls=true;
 			
 			
@@ -92,5 +95,22 @@ public class FileBankController {
 		return mvc;
 	}//getGallerContent() closing
 	
+	@PostMapping(value="/uploadFileBankFilesInCloud")
+	public ModelAndView uploadFiles(@RequestParam("filePaths") String filePaths[],Principal principal,
+			RedirectAttributes redirectAttributes, HttpServletRequest request){
+		logger.debug(" show fileManagement ...");
+		Integer userId = null;
+		try{
+			userId=(Integer) (ThreadLocalInfoContainer.INFO_CONTAINER.get()).get("USER_ID");
+		}catch(Exception e){e.printStackTrace();}
+		
+		ModelAndView mvc = new ModelAndView();
+		for(String str:filePaths){
+			System.out.println(str);
+		}
+		
+		
+		return mvc;
+	}//uploadFiles() closing
 	
 }

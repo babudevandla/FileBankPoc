@@ -19,15 +19,15 @@
 <jsp:body>
  
 <style>
-.modal-dialog {
+/* .modal-dialog {
   width: 75%;
  }
 .modal-header {
     background-color: #337AB7;
-    padding:16px 16px;
+    padding:5px 16px;
     color:#FFF;
     border-bottom:2px dashed #337AB7;
- }
+ } */
 </style>
   
     <div class="create-post">
@@ -61,9 +61,9 @@
             </div>
         </div>
         
-      	 <button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList?userid=${userid}" class="fileBankWindowCls">File Bank</button><br/>
-      	
-      	
+      	 <button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList?userid=${userid}" class="fileBankWindowCls" >
+       		<img alt="File Bank" src="${contextPath}/resources/default/images/filebank.ico" style="width: 25px;"> File Bank
+        </button><br/>
          <div class="pull-right"><a href="${contextPath}/sm/showHiddenFoldersAndFiles/${folderInfo.fId}?userid=${userid}"><label style="color:red">show hidden files and folders</label></a></div>
         
         <a href="${contextPath}/sm/file_management/${userid}" style="cursor: pointer;"	class="user-link">Home &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>

@@ -12,12 +12,20 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@taglib prefix="defaultTemplate" tagdir="/WEB-INF/tags"%>
+<style type="text/css">
 
+ div#fileBankDetailsId {
+    overflow-y: auto;
+    height: 100%;
+    overflow-x: hidden;
+    width: 100%;
+} 
+</style>
 
-	<div class="create-post" style="min-height: 43px;">
+	<div class="create-post" style="min-height: 0px;">
       
         <div class="col-md-12 col-sm-12">
-        	<div class="col-md-3 col-sm-3" align="left" style="right: 45px;top: -10px;">
+        	<div class="col-md-3 col-sm-3" align="left" style="right: -37px;top: -10px;">
         		<select name="fileOrigin" id="fileBankWindowId" >
           		<option value=""> --- Select File Origin ---</option>
           		<option value="LOCKER" >FILE BANK</option>
@@ -36,11 +44,11 @@
         	</div>
         </div>
     </div>
-    Total Files selected (<span id="selectedFilesCount"></span>)
-    <br/>
+   <!--  Total Files selected (<span id="selectedFilesCount"></span>)
+    <br/> -->
   <strong > SELECT ALL: <input type="checkbox" class="checkallsellerimages"> </strong>
-  <div class="media">
-   <form action="" id="sellerimagebulkapprove">
+  <div class="media" style="height:300px;margin-top: -2px;" id="fileBankDetailsId">
+  <form action="${contextPath}/sm/uploadFileBankFilesInCloud" id="sellerimagebulkapprove" method="post">
    	<div class="row js-masonry" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": ".grid-sizer", "percentPosition": true }'>
       <c:forEach items="${galleryContent}" var="files" varStatus="status">
     	<div class="grid-item col-md-2 col-sm-2" >
@@ -83,12 +91,12 @@
            			 </c:otherwise>
               		</c:choose>
                   </div>
-                  &nbsp;<input type="checkbox" name="filePathIds" class="selectCheck" value="${files.filePath}"> select
+                  &nbsp;<input type="checkbox" name="filePaths" class="selectCheck" value="${files.filePath}"> select
                 </div>
             </div> 
           </c:forEach>   
        </div>
-     </form>
+       </form>
     </div>
     
   <script type="text/javascript" >
@@ -136,16 +144,29 @@
   
   
   $('.checkallsellerimages').click(function () {
-	// $j(this).parents('table').find(':checkbox').attr('checked', this.checked);
-			$("#sellerimagebulkapprove").find(':checkbox').attr('checked', this.checked);
-			var size=$("[name='filePathIds']:checked").length;
-			$("#selectedFilesCount").html(size);
-	  });
+	  $("#sellerimagebulkapprove").find(':checkbox').attr('checked', this.checked);
+		//var size=$("[name='filePathIds']:checked").length;
+		//$("#selectedFilesCount").html(size);
+	});
   $(".selectCheck").click(function(){
 	  $(this).attr('checked', this.checked);
-	  var size=$("[name='filePathIds']:checked").length;
+	  var size=$("[name='filePaths']:checked").length;
 	  $("#selectedFilesCount").html(size);
 	  console.log(size);
+	  var files= $("[name='filePaths']:checked").val();
+  	  console.log(files);
+  	/*  var tdTag='';
+	 if( size > 0 ){
+		 for(var i=0;i<size;i++){
+			 tdTag=+'<div class="grid-item col-md-2 col-sm-2" id="selectedFiles"><div class="media-grid" style="height: 122px;">'
+			  +'<div class="img-wrapper" data-toggle="modal"  data-target=".modal-${status.count}">'
+			 +'<img src="${contextPath}${WebDav_Server_Url}?filePath='+files+'" alt="" class="digilocker-photo-sm " />'
+			 +'</div>'
+			+'</div></div> '
+		 }
+	 }
+  	  console.log(tdTag);	
+  	  $("#selectedFiles").html(tdTag); */
   });
   
   $(document).ready(function() {
@@ -155,4 +176,18 @@
 		  $("#selectedFilesCount").html(size);
 	  }
   })
+  
+  $('#fileBankFilesUpload').click(function(event){
+		event.preventDefault();
+		var r=confirm(" Are you sure want to upload cloud files ");
+		if(r){
+			var size=$("[name='filePaths']:checked").length;
+			if(size > 0){
+			 	$("#sellerimagebulkapprove").submit();
+			}else{
+				 alert('You should select atleast one file !');
+			}
+		}
+	});
+ 
   </script>  
