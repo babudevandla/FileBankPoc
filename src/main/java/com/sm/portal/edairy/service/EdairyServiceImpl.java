@@ -99,4 +99,16 @@ public class EdairyServiceImpl implements EdairyService{
 			updatedUrlWithHtmlTag= MessageFormat.format(WebDavServerConstant.HTML_AUDIO_TAG,raw_url);
 		return updatedUrlWithHtmlTag;
 	}
+
+	public List<String> getAbsoluteUrls(List<String> fileUrlList) {
+		List<String> updatedList  =null;
+		if(fileUrlList!=null && fileUrlList.size()>0){
+			updatedList =new ArrayList();
+			for(String url: fileUrlList) {
+				url =WebDavServerConstant.WEBDAV_SERVER_URL+url;
+				updatedList.add(url);
+			}//for closing
+		}//if closing
+		return updatedList;
+	}//getAbsoluteUrls() closing
 }//class closing

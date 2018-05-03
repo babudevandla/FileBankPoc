@@ -42,6 +42,7 @@ import com.sm.portal.edairy.model.EdairyActionEnum;
 import com.sm.portal.edairy.model.EdairyYearsEnum;
 import com.sm.portal.edairy.model.UserDairies;
 import com.sm.portal.edairy.service.EdairyServiceImpl;
+import com.sm.portal.filters.ThreadLocalInfoContainer;
 import com.sm.portal.model.EDairyDto;
 import com.sm.portal.model.Users;
 import com.sm.portal.service.EDairyService;
@@ -276,6 +277,28 @@ public class EDairyController {
 		
 		return mvc;
 	}//storeFilesInGallery() closing
+	
+	@RequestMapping(value = "/storeCloudFilesInEdairyPageContent", method = RequestMethod.POST)
+	public ModelAndView storeCloudFilesInEdairyPageContent(@ModelAttribute DairyPage dairyPage, @RequestParam("dairyId") Integer dairyId, @RequestParam("fileList") List<String> fileUrlList) {
+		
+		fileUrlList =edairyServiceImpl.getAbsoluteUrls(fileUrlList);
+		Integer userId =(Integer) (ThreadLocalInfoContainer.INFO_CONTAINER.get()).get("USER_ID");
+		if(fileUrlList.size()>0){
+						
+			String updatedPageContent =edairyServiceImpl.getContentAfterFileUpload(dairyPage.getContent(), fileUrlList);
+			DairyPage page=new DairyPage();
+			page.setPageNo(dairyPage.getPageNo());
+			page.setContent(updatedPageContent);
+			boolean result=edairyServiceImpl.savePageContent(userId, dairyId, page);
+		}
+		ModelAndView mvc= new ModelAndView();
+		EdairyActionEnum.EDIT_PAGE.toString();
+		mvc.setViewName("redirect:/sm/getDairyInfo/"+userId+"/"+dairyId+"?actionBy="+EdairyActionEnum.EDIT_PAGE.toString()+"&defaultPageNo="+dairyPage.getPageNo()+"&edit="+"YES");
+		
+		return mvc;
+	}//storeCloudFilesInEdairyPageContent() closing
+	
+	
 	@RequestMapping(value="/getUserDairiesList", method=RequestMethod.GET)
 	public ModelAndView getUserDairiesList(Principal principal){
 		logger.debug(" show user profile ...");

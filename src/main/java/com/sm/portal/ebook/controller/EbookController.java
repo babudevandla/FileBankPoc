@@ -36,6 +36,7 @@ import com.sm.portal.ebook.model.EbookPageBean;
 import com.sm.portal.ebook.model.EbookPageDto;
 import com.sm.portal.ebook.model.UserBooks;
 import com.sm.portal.ebook.service.EbookServiceImpl;
+import com.sm.portal.edairy.model.DairyPage;
 import com.sm.portal.edairy.model.EdairyActionEnum;
 import com.sm.portal.edairy.service.EdairyServiceImpl;
 import com.sm.portal.filters.ThreadLocalInfoContainer;
@@ -238,6 +239,31 @@ public class EbookController {
 		
 		return mvc;
 	}//storeFilesInGalleryFromEbook() closing
+	
+	@RequestMapping(value = "/storeCloudFilesInEbookPageContent", method = RequestMethod.POST)
+	public ModelAndView storeCloudFilesInEbookPageContent(@ModelAttribute EbookPage ebookPage, @RequestParam("bookId") Integer bookId, @RequestParam("fileList") List<String> fileUrlList) {
+		
+		fileUrlList =edairyServiceImpl.getAbsoluteUrls(fileUrlList);
+		Integer userId =(Integer) (ThreadLocalInfoContainer.INFO_CONTAINER.get()).get("USER_ID");
+		if(fileUrlList.size()>0){
+						
+			String updatedPageContent =edairyServiceImpl.getContentAfterFileUpload(ebookPage.getContent(), fileUrlList);
+			EbookPageDto ebookPageDto =new EbookPageDto();
+			ebookPageDto.setUserId(userId);
+			ebookPageDto.setBookId(bookId);
+			ebookPageDto.setContent(updatedPageContent);
+			ebookPageDto.setPageNo(ebookPage.getPageNo());
+			
+			ebookServiceImple.saveEbookPageContent(ebookPageDto);
+		}
+		ModelAndView mvc= new ModelAndView();
+		EdairyActionEnum.EDIT_PAGE.toString();
+		mvc.setViewName("redirect:/sm/editEbookContent?userId="+userId+"&bookId="+bookId+"&defaultPageNo="+ebookPage.getPageNo());
+		return mvc;
+	}//storeCloudFilesInEbookPageContent() closing
+	
+	
+	
 	
 	@RequestMapping(value="/updateEbookDetails", method=RequestMethod.POST)
 	public ModelAndView updateEbookDetails(@ModelAttribute Ebook ebook){
