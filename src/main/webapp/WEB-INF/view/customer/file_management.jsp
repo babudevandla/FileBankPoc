@@ -60,13 +60,12 @@
                	<a href="${contextPath}/sm/getGallerContent?userid=${userId}" class="btn btn-primary pull-right"><i class="fa fa-image" aria-hidden="true"></i> GALLERY</button></a>
             </div>
         </div>
-        
-      	 <button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList?userid=${userid}" class="fileBankWindowCls" >
+      	 <%-- <button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList?userid=${userid}" class="fileBankWindowCls" >
        		<img alt="File Bank" src="${contextPath}/resources/default/images/filebank.ico" style="width: 25px;"> File Bank
-        </button><br/>
+        </button><br/> --%>
          <div class="pull-right"><a href="${contextPath}/sm/showHiddenFoldersAndFiles/${folderInfo.fId}?userid=${userid}"><label style="color:red">show hidden files and folders</label></a></div>
         
-        <a href="${contextPath}/sm/file_management/${userid}" style="cursor: pointer;"	class="user-link">Home &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+        <a href="${contextPath}/sm/file_management" style="cursor: pointer;"	class="user-link">Home &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i></a>
          <c:forEach items="${addressBar}" var="folderPath" varStatus="status">
          	<c:if test="${not empty folderPath.folderName}">
              	<a href="${contextPath}/sm/getfolderinfo/${folderPath.folderId}" style="cursor: pointer;"	class="user-link">${folderPath.folderName} &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i> </a>

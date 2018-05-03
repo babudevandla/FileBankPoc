@@ -12,9 +12,20 @@
 <defaultTemplate:defaultDecorator>
 <jsp:attribute name="title">Dashboard</jsp:attribute>
 <jsp:body>
-   
+ <style type="text/css">
+ .hdtxt {
+    font-size: 16px;
+    color: #351d8b;
+    border-bottom: 1px solid rgba(106, 67, 253, 0.25);
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+}
+</style> 
+
+ 
    <h3 align="center"> Welcome to SM Portal!</h3>
      <br/><br/><br/>
+     <p class="hdtxt hidden-xs">Your dashboard </p>
      <div class="row"  >
        <div class="col-lg-3 col-sm-6">
            <div class="card">

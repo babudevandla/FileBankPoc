@@ -36,7 +36,10 @@
  	<%-- <form:hidden path="${userId}"/>
  	<form:hidden path="${ dairyId}"/> --%>
  	<input name="upload" type="button"	class="btn btn-primary uploadMultipleFiles1"  value="Uploadfiles" />
-	<textarea id="editor"  name="content">${dairyInfo.defaultPage.content}</textarea><br/>
+ 	<button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList?userid=${userid}" data-action="EDAIRY" class="fileBankWindowCls" style="margin-left: 50px;margin-top: -12px;">
+		<img alt="File Bank" src="${contextPath}/resources/default/images/filebank.ico" style="width: 25px;"> File Bank
+	</button>
+	<textarea id="editor"  name="content" class="edairyContentCls">${dairyInfo.defaultPage.content}</textarea><br/>
 	<input type="hidden" name="dairyId" class="dairyId" value="${dairyId}">
 	<input type="hidden" name="userId" class="userId" value="${userId}">
 	<input type="hidden" name="pageNo" class="pageNo">
@@ -51,7 +54,7 @@
 <div class="modal fade" id="UploadfilesModel" role="dialog">
     <div class="modal-dialog">
     <form action="${contextPath}/sm/storeFilesInGallery" id="storeFilesInGallery" enctype="multipart/form-data" method="post" >
-        <div class="modal-content">
+        <div class="modal-content" style="width: 600px; left: 200px;">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
                 <h4 class="modal-title filename"></h4>

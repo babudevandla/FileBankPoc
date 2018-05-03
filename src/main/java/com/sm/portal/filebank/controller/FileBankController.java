@@ -2,7 +2,6 @@ package com.sm.portal.filebank.controller;
 
 import java.security.Principal;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,9 +24,11 @@ import com.sm.portal.constants.URLCONSTANT;
 import com.sm.portal.digilocker.model.GalleryDetails;
 import com.sm.portal.digilocker.service.DigilockerService;
 import com.sm.portal.ebook.model.EbookPageDto;
+import com.sm.portal.ebook.service.EbookServiceImpl;
 import com.sm.portal.edairy.model.DairyPage;
 import com.sm.portal.edairy.model.EdairyActionEnum;
 import com.sm.portal.edairy.service.EdairyServiceImpl;
+import com.sm.portal.filebank.bean.FileBankCloudBean;
 import com.sm.portal.filters.ThreadLocalInfoContainer;
 
 @RestController
@@ -40,6 +42,9 @@ public class FileBankController {
 	
 	@Autowired
 	EdairyServiceImpl edairyServiceImpl;
+	
+	@Autowired
+    private EbookServiceImpl ebookServiceImple;
 	
 	@GetMapping(value="/getFileBankList")
 	public ModelAndView getFileBankList(@RequestParam(name="userid", required=false) Integer userid,Principal principal,
@@ -105,41 +110,42 @@ public class FileBankController {
 	}//getGallerContent() closing
 	
 	@PostMapping(value="/uploadFileBankFilesInCloud")
-	public ModelAndView uploadFiles(@RequestParam("filePaths") String filePaths[],Principal principal,
+	public ModelAndView uploadFileBankCloudFiles(@ModelAttribute("bankCloudBean") FileBankCloudBean bankCloudBean,Principal principal,
 			RedirectAttributes redirectAttributes, HttpServletRequest request){
-		
 		/**
 		 * id(dairy/ebook id), content, pageNo, filePaths[], actionType="EBOOK/EDAIRY(enum)"
 		 * 
 		 */
 		logger.debug(" show fileManagement ...");
 		Integer userId =(Integer) (ThreadLocalInfoContainer.INFO_CONTAINER.get()).get("USER_ID");
-		List<String> fileUrlList =edairyServiceImpl.getAbsoluteUrls(Arrays.asList(filePaths));
-		
-		if(fileUrlList.size()>0){
-			String updatedPageContent =edairyServiceImpl.getContentAfterFileUpload(dairyPage.getContent(), fileUrlList);			
-		}
-		
+		List<String> fileUrlList =edairyServiceImpl.getAbsoluteUrls(Arrays.asList(bankCloudBean.getFilePaths()));
 		ModelAndView mvc= new ModelAndView();
-		EdairyActionEnum.EDIT_PAGE.toString();
-		if("Edairy") {//actiontype
+		String updatedPageContent=null;
+		if(fileUrlList.size()>0){
+			updatedPageContent =edairyServiceImpl.getContentAfterFileUpload(bankCloudBean.getContent(), fileUrlList);			
+		}else{
+			updatedPageContent=bankCloudBean.getContent();
+		}
+		if("EDAIRY".equalsIgnoreCase(bankCloudBean.getActionType())) {//actiontype
 			DairyPage page=new DairyPage();
-			page.setPageNo(dairyPage.getPageNo());
+			page.setPageNo(bankCloudBean.getPageNo());
 			page.setContent(updatedPageContent);
-			boolean result=edairyServiceImpl.savePageContent(userId, dairyId, page);
-			mvc.setViewName("redirect:/sm/getDairyInfo/"+userId+"/"+dairyId+"?actionBy="+EdairyActionEnum.EDIT_PAGE.toString()+"&defaultPageNo="+dairyPage.getPageNo()+"&edit="+"YES");
+			boolean result=edairyServiceImpl.savePageContent(userId, bankCloudBean.getId(), page);
+			mvc.setViewName("redirect:/sm/getDairyInfo/"+userId+"/"+bankCloudBean.getId()+"?actionBy="+EdairyActionEnum.EDIT_PAGE.toString()+"&defaultPageNo="+bankCloudBean.getPageNo()+"&edit="+"YES");
 			
-		}else {
+		}else if("EBOOK".equalsIgnoreCase(bankCloudBean.getActionType())){
 			EbookPageDto ebookPageDto =new EbookPageDto();
 			ebookPageDto.setUserId(userId);
-			ebookPageDto.setBookId(bookId);
+			ebookPageDto.setBookId(bankCloudBean.getId());
 			ebookPageDto.setContent(updatedPageContent);
-			ebookPageDto.setPageNo(ebookPage.getPageNo());
+			ebookPageDto.setPageNo(bankCloudBean.getPageNo());
 			
 			ebookServiceImple.saveEbookPageContent(ebookPageDto);
-			mvc.setViewName("redirect:/sm/editEbookContent?userId="+userId+"&bookId="+bookId+"&defaultPageNo="+ebookPage.getPageNo());
+			mvc.setViewName("redirect:/sm/editEbookContent?userId="+userId+"&bookId="+bankCloudBean.getId()+"&defaultPageNo="+bankCloudBean.getPageNo());
+		}else if("GALLERY".equalsIgnoreCase(bankCloudBean.getActionType())){
+			
 		}
-			return mvc;
+		return mvc;
 		
 	}//uploadFiles() closing
 	

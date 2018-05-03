@@ -66,12 +66,30 @@ $(document).ready(function() {
 			event.preventDefault();
 			var	href=$(this).attr('data-href');
 			console.log(href);
+			var	action=$(this).attr('data-action');
+			var id=null,content=null,pageNo=null;
+			if(action=="EBOOK"){
+				 id=$(".bookId").val();
+				 content=$(".ebookContentCls").val();
+				 pageNo=$(".defaultPageNoCls").html();
+			}else if(action=="EDAIRY"){
+				 id=$(".dairyId").val();
+				 content=$(".edairyContentCls").val();
+				 pageNo=$("#pageNoId").html();
+			}
+			console.log("ID:"+id+"::PageNO:"+pageNo+"::Action:"+action);
+			
+			
 			$.ajax({
 				url: href,
 				type:'GET',
 				cache: false,
 				success: function(data) {
 					$("#fileBankFilesList").html(data);
+					$(".fbCls").val(id);
+					$(".contentCls").val(content);
+					$(".pageNoCls").val(pageNo);
+					$(".actionTypeCls").val(action);
 					$('#fileBankModelPopup').modal({
 			        	backdrop: 'static', 
 			        	keyboard: false,

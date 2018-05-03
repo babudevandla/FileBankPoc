@@ -48,9 +48,9 @@
               	</div>
               </div>
               </form>
-               <button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList?userid=${userid}" class="fileBankWindowCls" style="margin-left: 292px;margin-top: -12px;">
+              <%--  <button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList?userid=${userid}" data-action="GALLERY" class="fileBankWindowCls" style="margin-left: 292px;margin-top: -12px;">
               		<img alt="File Bank" src="${contextPath}/resources/default/images/filebank.ico" style="width: 25px;"> File Bank
-               </button>
+               </button> --%>
             </div><br/><br/>
             <div class="col-md-12 col-sm-12">
             	<div class="col-md-3 col-sm-3" align="left" style="right: 45px;top: -10px;">

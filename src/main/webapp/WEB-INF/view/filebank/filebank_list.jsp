@@ -49,6 +49,10 @@
   <strong > SELECT ALL: <input type="checkbox" class="checkallsellerimages"> </strong>
   <div class="media" style="height:300px;margin-top: -2px;" id="fileBankDetailsId">
   <form action="${contextPath}/sm/uploadFileBankFilesInCloud" id="sellerimagebulkapprove" method="post">
+  	<input type="hidden" name="id"  class="fbCls" id="FBID">
+	<input type="hidden" name="content" class="contentCls">
+	<input type="hidden" name="pageNo" class="pageNoCls">
+	<input type="hidden" name="actionType" class="actionTypeCls" >
    	<div class="row js-masonry" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": ".grid-sizer", "percentPosition": true }'>
       <c:forEach items="${galleryContent}" var="files" varStatus="status">
     	<div class="grid-item col-md-2 col-sm-2" >
