@@ -54,8 +54,8 @@
             </div><br/><br/>
             <div class="col-md-12 col-sm-12">
             	<div class="col-md-3 col-sm-3" align="left" style="right: 45px;top: -10px;">
-            		<select name="fileOrigin" id="fileOrigin" data-href="${contextPath}/sm/getGallerContent">
-	             		<option value=""> --- Select File Origin ---</option>
+            		<form:select name="fileOrigin" id="fileOrigin" data-href="${contextPath}/sm/getGallerContent">
+	             		<form:option value="ALL"> --- ALL ---</option>
 	             		<option value="LOCKER" >FILE BANK</option>
 	             		<option value="GALLERY">GALLERY</option>
 	             		<option value="EBOOK">E-BOOK</option>

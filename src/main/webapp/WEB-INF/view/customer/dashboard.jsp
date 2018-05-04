@@ -23,8 +23,7 @@
 </style> 
 
  
-   <h3 align="center"> Welcome to SM Portal!</h3>
-     <br/><br/><br/>
+   <br/>
      <p class="hdtxt hidden-xs">Your dashboard </p>
      <div class="row"  >
        <div class="col-lg-3 col-sm-6">
