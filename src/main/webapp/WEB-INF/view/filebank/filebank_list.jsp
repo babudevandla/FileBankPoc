@@ -26,8 +26,8 @@
       
         <div class="col-md-12 col-sm-12">
         	<div class="col-md-3 col-sm-3" align="left" style="right: -37px;top: -10px;">
-        		<select name="fileOrigin" id="fileBankWindowId" >
-          		<option value="ALL" <c:if test="${fileOrigin eq 'ALL' }"> selected</c:if>> --- ALL ---</option>
+        		<select name="fileOrigin" class="fileBankWindowId" >
+          		<option value="" <c:if test="${fileOrigin eq 'ALL' }"> selected</c:if>> --- ALL ---</option>
           		<option value="LOCKER" <c:if test="${fileOrigin eq 'LOCKER' }"> selected</c:if> >FILE BANK</option>
           		<option value="GALLERY" <c:if test="${fileOrigin eq 'GALLERY' }"> selected</c:if>>GALLERY</option>
           		<option value="E-BOOK" <c:if test="${fileOrigin eq 'E-BOOK' }"> selected</c:if>>E-BOOK</option>
@@ -35,12 +35,12 @@
          		</select>
         	</div>
         	<div  class="col-md-9 col-sm-9" align="right" style="left: 70px;top: -18px;">
-         	<a  data-href="${contextPath}/sm/getFileBankList?userid=${userid}&filesType=ALL" class="${allCls?'btn active':''} fileBankWindowCls" style="cursor: pointer;"> ALL</a>  &nbsp; | &nbsp; &nbsp;
-         	<a  data-href="${contextPath}/sm/getFileBankList?userid=${userid}&filesType=IMAGE" class="${imgCls?'btn active':''} fileBankWindowCls" style="cursor: pointer;"><i class="fa fa-image" aria-hidden="true"></i> IMAGE</a>  &nbsp; &nbsp;|  &nbsp; &nbsp;
-         	<a  data-href="${contextPath}/sm/getFileBankList?userid=${userid}&filesType=AUDIO" class="${audCls?'btn active':''} fileBankWindowCls" style="cursor: pointer;"><i class="fa fa-file-audio-o" aria-hidden="true"></i> AUDIO</a>  &nbsp; &nbsp;|  &nbsp; &nbsp;
-         	<a  data-href="${contextPath}/sm/getFileBankList?userid=${userid}&filesType=VIDEO" class="${vedCls?'btn active':''} fileBankWindowCls" style="cursor: pointer;"><i class="fa fa-file-video-o" aria-hidden="true"></i> VIDEO</a>  &nbsp; &nbsp;|  &nbsp; &nbsp;
-          <a  data-href="${contextPath}/sm/getFileBankList?userid=${userid}&filesType=DOCUMENT" class="${docCls?'btn active':''} fileBankWindowCls" style="cursor: pointer;"><i class="fa fa-file-text" aria-hidden="true"></i> DOCUMENTS</a> &nbsp; &nbsp;|  &nbsp; &nbsp;
-          <a  data-href="${contextPath}/sm/getFileBankList?userid=${userid}&fileStatus=DELETED" class="${recyleCls?'btn active':''} fileBankWindowCls" style="cursor: pointer;"><img alt="" src="${contextPath}/resources/default/images/bin-blue-icon.png"> RECYCLE BIN</a>
+         	<a  data-href="${contextPath}/sm/getFileBankList" data-filesType="ALL" class="${allCls?'btn active':''} fileBankWindowCls" style="cursor: pointer;"> ALL</a>  &nbsp; | &nbsp; &nbsp;
+         	<a  data-href="${contextPath}/sm/getFileBankList" data-filesType="IMAGE" class="${imgCls?'btn active':''} fileBankWindowCls" style="cursor: pointer;"><i class="fa fa-image" aria-hidden="true"></i> IMAGE</a>  &nbsp; &nbsp;|  &nbsp; &nbsp;
+         	<a  data-href="${contextPath}/sm/getFileBankList" data-filesType="AUDIO" class="${audCls?'btn active':''} fileBankWindowCls" style="cursor: pointer;"><i class="fa fa-file-audio-o" aria-hidden="true"></i> AUDIO</a>  &nbsp; &nbsp;|  &nbsp; &nbsp;
+         	<a  data-href="${contextPath}/sm/getFileBankList" data-filesType="VIDEO" class="${vedCls?'btn active':''} fileBankWindowCls" style="cursor: pointer;"><i class="fa fa-file-video-o" aria-hidden="true"></i> VIDEO</a>  &nbsp; &nbsp;|  &nbsp; &nbsp;
+         	<a  data-href="${contextPath}/sm/getFileBankList" data-filesType="DOCUMENT" class="${docCls?'btn active':''} fileBankWindowCls" style="cursor: pointer;"><i class="fa fa-file-text" aria-hidden="true"></i> DOCUMENTS</a> &nbsp; &nbsp; &nbsp; &nbsp;
+        	<input type="hidden" value="${fileType}" id="hiddenFileType">
         	</div>
         </div>
     </div>
@@ -50,7 +50,7 @@
   <div class="media" style="height:300px;margin-top: -2px;" id="fileBankDetailsId">
   <form action="${contextPath}/sm/uploadFileBankFilesInCloud" id="sellerimagebulkapprove" method="post">
   	<input type="hidden" name="id"  value="${fileBankCloudBean.id}" id="FBID" class="fbCls">
-	<input type="hidden" name="content" value="${fileBankCloudBean.content }" class="contentCls">
+	<input type="hidden" name="content" value='${fileBankCloudBean.content }' class="contentCls">
 	<input type="hidden" name="pageNo" value="${fileBankCloudBean.pageNo }" class="pageNoCls">
 	<input type="hidden" name="actionType" value="${fileBankCloudBean.actionType }" class="actionTypeCls" >
    	<div class="row js-masonry" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": ".grid-sizer", "percentPosition": true }'>
@@ -78,7 +78,7 @@
               				<iframe src="http://docs.google.com/gview?url=${contextPath}${WebDav_Server_Url}?filePath=${files.filePath}&embedded=true"  ></iframe>
               		  </c:when>
               		  <c:when test="${files.fileType eq 'VIDEO' }">
-             			<video  height="134" controls>
+             			<video  height="100" controls>
 						  <source src="${contextPath}${WebDav_Server_Url}?filePath=${files.filePath}" type="video/mp4" style="height: 100px;"/>
 						</video>
               		 </c:when>
@@ -108,12 +108,19 @@
   $('.fileBankWindowCls').on('click',function(event){
 		 event.preventDefault();
 		 var href1=$(this).attr("data-href");
+		 var filesType=$(this).attr('data-filesType');
+		 var fileOrigin=$(".fileBankWindowId").val();
 		 var id=$(".fbCls").val();
 		 var pageContent=$(".contentCls").val();
 		 var pageNo=$(".pageNoCls").val();
 		 var actionType=$(".actionTypeCls").val();
-		 alert(pageContent);
-		 var href=href1+"&id="+id+"&content="+pageContent+"&pageNo="+pageNo+"&actionType="+actionType;
+		// alert(pageContent);
+		var href;
+		if(fileOrigin!=null){
+			href=encodeURI(href1+"?filesType="+filesType+"&fileOrigin="+fileOrigin+"&id="+id+"&content="+pageContent+"&pageNo="+pageNo+"&actionType="+actionType);
+		}else{
+			href=encodeURI(href1+"?filesType="+filesType+"&id="+id+"&content="+pageContent+"&pageNo="+pageNo+"&actionType="+actionType);
+		}
 		 console.log(href);
 		 $.ajax({
 				url: href,
@@ -131,15 +138,16 @@
 			});
 		});
   
-  $('#fileBankWindowId').change(function(event){
+  $('.fileBankWindowId').change(function(event){
 		 event.preventDefault();
-		 var fileOrigin=$(this).val();
+		 var fileOrigin=$(".fileBankWindowId").val();
+		 var hiddenFileType=$("#hiddenFileType").val();
 		 var id=$(".fbCls").val();
 		 var pageContent=$(".contentCls").val();
 		 var pageNo=$(".pageNoCls").val();
 		 var actionType=$(".actionTypeCls").val();
-		 alert(pageContent);
-		 var href="${contextPath}/sm/getFileBankList?fileOrigin="+fileOrigin+"&id="+id+"&content="+pageContent+"&pageNo="+pageNo+"&actionType="+actionType;
+		 //alert(pageContent);
+		 var href=encodeURI("${contextPath}/sm/getFileBankList?filesType="+hiddenFileType+"&fileOrigin="+fileOrigin+"&id="+id+"&content="+pageContent+"&pageNo="+pageNo+"&actionType="+actionType);
 		 console.log(href);
 		 $.ajax({
 				url: href,

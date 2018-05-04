@@ -33,11 +33,13 @@
     </table>
  
 	 <form:form action="${contextPath}/sm/saveEbookPageContent"  id="saveEbookPageId" method="post" modelAttribute="eBookPageDto">
-	 	<%-- <form:hidden path="${userId}"/>
-	 	<form:hidden path="${ dairyId}"/> --%>
-	 	<input name="upload" type="button"	class="btn btn-primary uploadMultipleFiles1"  value="Uploadfiles" />
-	 	<button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList" data-action="EBOOK" class="fileBankWindowCls btn btn-primary" style="margin-left: 50px;margin-top: -12px;">
-			<img alt="File Bank" src="${contextPath}/resources/default/images/filebank.ico" style="width: 25px;"> File Bank
+	 	
+	 	<!-- <input name="upload" type="button"	class="btn btn-primary uploadMultipleFiles1"  value="Uploadfiles" /> -->
+	 	<button class="btn btn-primary uploadMultipleFiles1">
+	 		<i class="fa fa-upload"></i> &nbsp;Local Files
+	 	</button>
+	 	<button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList" data-action="EBOOK" class="btn btn-primary" style="margin-left: 20px;margin-top: 0px;">
+			 <i class="fa fa-upload"></i>&nbsp; File Bank
 		</button>
 		<textarea id="editor"  name="content" class="ebookContentCls">${eBook.defaultPage.content}</textarea><br/>
 		<input type="hidden" name="bookId" class="bookId" value="${eBook.bookId}">

@@ -91,9 +91,9 @@ $(document).ready(function() {
 				 content=$(".edairyContentCls").val();
 				 pageNo=$("#pageNoId").html();
 			}
-			alert(content);
+			//alert(content);
 			console.log("ID:"+id+"::PageNO:"+pageNo+"::Action:"+action);
-			var href=href1+"?id="+id+"&content="+content+"&pageNo="+pageNo+"&actionType="+action;
+			var href=encodeURI(href1+"?id="+id+"&content="+content+"&pageNo="+pageNo+"&actionType="+action);
 			
 			$.ajax({
 				url: href,
@@ -118,7 +118,6 @@ $(document).ready(function() {
 	
 		$('#fileBankFilesUpload').click(function(event){
 			event.preventDefault();
-			alert($(".ebookContentCls").val());
 			var r=confirm(" Are you sure want to upload cloud files ");
 			if(r){
 				var size=$("[name='filePaths']:checked").length;

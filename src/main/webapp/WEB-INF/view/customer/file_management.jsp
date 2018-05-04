@@ -12,22 +12,20 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@taglib prefix="defaultTemplate" tagdir="/WEB-INF/tags"%>
-
+<link rel="stylesheet" type="text/css" href="${contextPath}/resources/default/css/util.css">
+<link rel="stylesheet" type="text/css" href="${contextPath}/resources/default/css/main.css">
 
 <defaultTemplate:defaultDecorator>
 <jsp:attribute name="title">File Bank</jsp:attribute>
 <jsp:body>
  
 <style>
-/* .modal-dialog {
-  width: 75%;
- }
-.modal-header {
-    background-color: #337AB7;
-    padding:5px 16px;
-    color:#FFF;
-    border-bottom:2px dashed #337AB7;
- } */
+#textellipse{
+ 	white-space: nowrap; 
+    width: 70px; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
 </style>
   
     <div class="create-post">
@@ -71,11 +69,13 @@
              	<a href="${contextPath}/sm/getfolderinfo/${folderPath.folderId}" style="cursor: pointer;"	class="user-link">${folderPath.folderName} &nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i> </a>
        		</c:if>
         </c:forEach>
+        
+        
      <div class="media">
        	<div class="row js-masonry" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": ".grid-sizer", "percentPosition": true }'>
            	<div class="widget">
             <div >
-            <table class="table user-list"  style="margin-left: 10px;">
+            <%-- <table class="table user-list"  style="margin-left: 10px;">
               <thead>
                 <tr>
                   <th><span>Name <i class="fa fa-chevron-right" aria-hidden="true"></i></span></th>
@@ -97,16 +97,6 @@
 				                		<i class="fa fa-folder" aria-hidden="true"></i> &nbsp;${folders.fName} </strong>
                 					</a>
                 				</td>	
-                				<%-- <td>	
-                					<a href="${contextPath}/sm/deleteOrHidefile?folderId=${folders.fId}&deleteInfo=Folder&parentId=${folders.parentId}&userid=${userid}&action=Delete" style="cursor: pointer;"	class="user-link">
-				                		<img src="${contextPath}/resources/default/images/delete.jpg" alt="File" style="width: 25px;"/>
-                					</a>
-                				</td>
-                				<td>
-                					<a href="${contextPath}/sm/deleteOrHidefile?folderId=${folders.fId}&deleteInfo=Folder&parentId=${folders.parentId}&userid=${userid}&action=Hide" style="cursor: pointer;"	class="user-link">
-				                		<img src="${contextPath}/resources/default/images/showorhide.png" alt="File" style="width: 25px;"/>
-                					</a>
-                				</td> --%>
                 				<td>
                 					10 kb
                 				</td>
@@ -117,12 +107,6 @@
                 					${user.firstname}
                 				</td>
                 				<td>
-                					<!-- <a href="#" class="table-link">
-				                      <span class="fa-stack">
-				                        <i class="fa fa-square fa-stack-2x"></i>
-				                        <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
-				                      </span>
-				                    </a> -->
 				                    <a href="${contextPath}/sm/deleteOrHidefile?folderId=${folders.fId}&deleteInfo=Folder&parentId=${folders.parentId}&userid=${userid}&action=Delete" class="table-link danger">
 				                      <span class="fa-stack">
 				                        <i class="fa fa-square fa-stack-2x"></i>
@@ -136,18 +120,6 @@
 				                        <i class="fa fa-eye-slash fa-stack-1x fa-inverse"></i>
 				                      </span>
 				                    </a>
-				                    <!-- <a href="#" class="table-link">
-				                      <span class="fa-stack">
-				                        <i class="fa fa-square fa-stack-2x"></i>
-				                        <i class="fa fa-share fa-stack-1x fa-inverse"></i>
-				                      </span>
-				                    </a> -->
-				                    <!-- <a href="#" class="table-link">
-				                      <span class="fa-stack">
-				                        <i class="fa fa-square fa-stack-2x"></i>
-				                        <i class="fa fa-download fa-stack-1x fa-inverse"></i>
-				                      </span>
-				                    </a> -->
 				                </td>
 			                </tr>
                 		</c:forEach>
@@ -159,7 +131,7 @@
 				                		<c:choose>
 				                			<c:when test="${files.fileType eq 'IMAGE' }">
 				                				<img src="${contextPath}${Media_rul}?filePath=${files.filePath}" alt="" class="digilocker-photo-sm " />
-				                				<%-- <img alt="" src="${contextPath}/resources/default/images/img_icon.png" style="width: 20px;margin-top: -3px;"> --%>
+				                				<img alt="" src="${contextPath}/resources/default/images/img_icon.png" style="width: 20px;margin-top: -3px;">
 				                			</c:when>
 				                			<c:when test="${files.fileType eq 'DOCUMENT' && files.fileExtension eq 'pdf' }">
 				                				<!-- <i class="fa fa-file-pdf-o" aria-hidden="true"></i> -->
@@ -190,21 +162,7 @@
                 					</a>
                 					
                 				</td>
-                				<%-- <td>
-                					<a href="${contextPath}/sm/deleteOrHidefile?folderId=${folders.fId}&deleteInfo=File&&parentId=${folderInfo.fId}&userid=${userid}&action=Delete&fileId=${files.fileId}" style="cursor: pointer;"	class="user-link">
-				                		<img src="${contextPath}/resources/default/images/delete.jpg" alt="File" style="width: 25px;"/>
-                					</a>
-                				</td>
-                				<td>
-                					<a href="${contextPath}/sm/deleteOrHidefile?folderId=${folders.fId}&deleteInfo=File&&parentId=${folderInfo.fId}&userid=${userid}&action=Hide&fileId=${files.fileId}" style="cursor: pointer;"	class="user-link">
-				                		<img src="${contextPath}/resources/default/images/showorhide.png" alt="File" style="width: 25px;"/>
-                					</a>	
-				                </td>
-				                <td>
-                					</div><a href="${contextPath}/sm/downloadFile/${folderInfo.fId}?filePath=${files.filePath}" id="downloadFile" style="cursor: pointer;"	class="user-link" target="_self">
-				                		<img src="${contextPath}/resources/default/images/download.jpg" alt="File" style="width: 25px;"/>
-                					</a>	
-				                </td> --%>
+                				
 				                <td>
                 					10 kb
                 				</td>
@@ -215,12 +173,6 @@
                 					${user.firstname}
                 				</td>
 				                <td>
-                					<!-- <a href="#" class="table-link">
-				                      <span class="fa-stack">
-				                        <i class="fa fa-square fa-stack-2x"></i>
-				                        <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
-				                      </span>
-				                    </a> -->
 				                    <a href="${contextPath}/sm/deleteOrHidefile?folderId=${folders.fId}&deleteInfo=File&&parentId=${folderInfo.fId}&userid=${userid}&action=Delete&fileId=${files.fileId}" class="table-link danger">
 				                      <span class="fa-stack">
 				                        <i class="fa fa-square fa-stack-2x"></i>
@@ -233,12 +185,7 @@
 				                        <i class="fa fa-eye-slash fa-stack-1x fa-inverse"></i>
 				                      </span>
 				                    </a>
-				                    <!-- <a href="#" class="table-link">
-				                      <span class="fa-stack">
-				                        <i class="fa fa-square fa-stack-2x"></i>
-				                        <i class="fa fa-share fa-stack-1x fa-inverse"></i>
-				                      </span>
-				                    </a> -->
+				                    
 				                     <a href="${contextPath}/sm/downloadFile/${folderInfo.fId}?filePath=${files.filePath}" class="table-link">
 				                      <span class="fa-stack">
 				                        <i class="fa fa-square fa-stack-2x"></i>
@@ -290,7 +237,156 @@
                 	</c:otherwise>
                 </c:choose>
               </tbody>
-            </table>
+            </table> --%>
+            <div class="table100 ver1 m-b-110" style="margin-left: 12px;width: 913px;">
+					<div class="table100-head">
+						<table>
+							<thead>
+								<tr class="row100 head">
+									<th class="cell100 column1">Name</th>
+									<th class="cell100 column2">Size</th>
+									<th class="cell100 column3">Last Modified</th>
+									<th class="cell100 column4">Owner</th>
+									<th class="cell100 column5">Action</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+
+					<div class="table100-body js-pscroll">
+						<table>
+							<tbody>
+							<c:choose>
+			                	<c:when test="${isInternalFolder eq 'Yes' }">
+			                		<c:forEach items="${folderInfo.childFolders}" var="folders" varStatus="status">
+						                <tr class="row100 body">
+							                <td class="cell100 column1">
+							                	<a href="${contextPath}/sm/getfolderinfo/${folders.fId}" style="cursor: pointer;"	class="user-link">
+							                		<strong style="color: black;" id="textellipse"><img alt="${folders.fName}" src="${contextPath}/resources/default/images/folder_PNG8773.png" style="width: 20px;"> &nbsp;${folders.fName} </strong>
+			                					</a>
+			                				</td>	
+			                				<td class="cell100 column2">10 kb</td>
+			                				<td class="cell100 column3">2018-02-28</td>
+			                				<td class="cell100 column4">${user.firstname}</td>
+			                				<td class="cell100 column5">
+							                    <a href="${contextPath}/sm/deleteOrHidefile?folderId=${folders.fId}&deleteInfo=Folder&parentId=${folders.parentId}&userid=${userid}&action=Delete" class="table-link danger">
+							                      <span class="fa-stack">
+							                        <i class="fa fa-square fa-stack-2x"></i>
+							                        <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+							                      </span>
+							                    </a>
+							                    
+							                    <a href="${contextPath}/sm/deleteOrHidefile?folderId=${folders.fId}&deleteInfo=Folder&parentId=${folders.parentId}&userid=${userid}&action=Hide" style="cursor: pointer;"	class="user-link">
+							                      <span class="fa-stack">
+							                        <i class="fa fa-square fa-stack-2x"></i>
+							                        <i class="fa fa-eye-slash fa-stack-1x fa-inverse"></i>
+							                      </span>
+							                    </a>
+							                </td>
+						                </tr>
+			                		</c:forEach>
+			                		
+			                		<c:forEach items="${folderInfo.localFilesInfo}" var="files" varStatus="status">
+						                <tr class="row100 body">
+							                <td class="cell100 column1">
+							                	<a href="${contextPath}${Media_rul2}?filePath=${files.filePath}"  target="_blank" style="cursor: pointer;"	class="user-link">
+							                		<c:choose>
+							                			<c:when test="${files.fileType eq 'IMAGE' }">
+							                				<img src="${contextPath}${Media_rul}?filePath=${files.filePath}" alt="" class="digilocker-photo-sm " />
+							                				<%-- <img alt="" src="${contextPath}/resources/default/images/img_icon.png" style="width: 20px;margin-top: -3px;"> --%>
+							                			</c:when>
+							                			<c:when test="${files.fileType eq 'DOCUMENT' && files.fileExtension eq 'pdf' }">
+							                				<!-- <i class="fa fa-file-pdf-o" aria-hidden="true"></i> -->
+							                				<img alt="" src="${contextPath}/resources/default/images/pdf_icon.png" style="width: 20px;margin-top: -3px;">
+							                			</c:when>
+							                			<c:when test="${files.fileType eq 'VIDEO' }">
+							                				<!-- <i class="fa fa-file-video-o" aria-hidden="true"></i> -->
+							                				<img alt="" src="${contextPath}/resources/default/images/vedio_icon.png" style="width: 25px;margin-top: -3px;">
+							                			</c:when>
+							                			<c:when test="${files.fileType eq 'AUDIO' }">
+							                				<!-- <i class="fa fa-file-audio-o" aria-hidden="true"></i> -->
+							                				<img alt="" src="${contextPath}/resources/default/images/audio_icon.png" style="width: 25px;margin-top: -3px;">
+							                			</c:when>
+							                			<c:when test="${files.fileExtension eq 'xls' || files.fileExtension eq 'xlsx' }">
+							                				 <img alt="" src="${contextPath}/resources/default/images/excel_icon.png" style="width: 25px;margin-top: -3px;"> 
+							                			</c:when>
+							                			<c:when test="${files.fileType eq 'DOCUMENT' && (files.fileExtension eq 'doc' || files.fileExtension eq 'docx')}">
+							                				<img alt="" src="${contextPath}/resources/default/images/doc_icon.png" style="width: 25px;margin-top: -3px;">
+							                			</c:when>
+							                			<c:when test="${files.fileExtension eq 'txt' }">
+							                				<img alt="" src="${contextPath}/resources/default/images/text-icon.png" style="width: 25px;margin-top: -3px;"> 
+							                			</c:when>
+							                			<c:otherwise>
+							                				<i class="fa fa-file" aria-hidden="true"></i>
+							                			</c:otherwise>
+							                		</c:choose>
+							                		<strong style="color: black;" id="textellipse">&nbsp;${files.fileName} </strong>
+			                					</a>
+			                					
+			                				</td>
+							                <td class="cell100 column2">10 kb</td>
+			                				<td class="cell100 column3">2018-02-28</td>
+			                				<td class="cell100 column4">${user.firstname}</td>
+							                <td class="cell100 column5">
+							                    <a href="${contextPath}/sm/deleteOrHidefile?folderId=${folders.fId}&deleteInfo=File&&parentId=${folderInfo.fId}&userid=${userid}&action=Delete&fileId=${files.fileId}" class="table-link danger">
+							                      <span class="fa-stack">
+							                        <i class="fa fa-square fa-stack-2x"></i>
+							                        <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+							                      </span>
+							                    </a>
+							                    <a href="${contextPath}/sm/deleteOrHidefile?folderId=${folders.fId}&deleteInfo=File&&parentId=${folderInfo.fId}&userid=${userid}&action=Hide&fileId=${files.fileId}" class="table-link danger">
+							                      <span class="fa-stack">
+							                        <i class="fa fa-square fa-stack-2x"></i>
+							                        <i class="fa fa-eye-slash fa-stack-1x fa-inverse"></i>
+							                      </span>
+							                    </a>
+							                    
+							                     <a href="${contextPath}/sm/downloadFile/${folderInfo.fId}?filePath=${files.filePath}" class="table-link">
+							                      <span class="fa-stack">
+							                        <i class="fa fa-square fa-stack-2x"></i>
+							                        <i class="fa fa-download fa-stack-1x fa-inverse"></i>
+							                      </span>
+							                    </a>
+							                    
+							                    <a href="${contextPath}/sm/downloadFile/${folderInfo.fId}?filePath=${files.filePath}" class="table-link">
+							                      <span class="fa-stack">
+							                        <i class="fa fa-square fa-stack-2x"></i>
+							                       <i class="fa fa-arrow-right  fa-stack-1x fa-inverse" aria-hidden="true"></i>
+							                      </span>
+							                    </a>
+							                    
+							                </td>
+						                </tr>
+			                		</c:forEach>
+			                	</c:when>
+			                	<c:otherwise>
+			                		 <c:forEach items="${digiLockerHomeData}" var="folders" varStatus="status">
+			                		 	<c:if test="${not empty folders.fName}">
+						                	<c:choose>
+						                		<c:when test="${folders.origin eq 'LOCKER' }">
+								                	<tr  class="row100 body">
+										                <td class="cell100 column1">
+											                <a href="${contextPath}/sm/getfolderinfo/${folders.fId}" style="cursor: pointer;"	class="user-link">
+								                				<strong style="color: black;" id="textellipse"><img alt="${folders.fName}" src="${contextPath}/resources/default/images/folder_PNG8773.png" style="width: 20px;"> &nbsp;${folders.fName}</strong> 
+											                 </a>	
+										                 </td>
+										                 <td class="cell100 column2">10 kb</td>
+						                				 <td class="cell100 column3">2018-02-28</td>
+						                				 <td class="cell100 column4">${user.firstname}</td>
+										                 <td class="cell100 column5"></td>
+								                 	</tr>
+						                 		</c:when>
+						                	</c:choose>
+						                	
+						                 </c:if>
+						                 </c:forEach>
+			                	</c:otherwise>
+			                </c:choose>
+								
+							</tbody>
+						</table>
+					</div>
+				</div>
             </div>
             </div>
         </div>

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class FileBankController {
 			if(filesType==null)
 				filesType="ALL";
 			List<GalleryDetails> gallerylist = digilockerService.getGallerContent(userid, filesType,fileStatus);
-			if(fileOrigin!=null)
+			if(StringUtils.isNotBlank(fileOrigin))
 				gallerylist=gallerylist.stream().filter( g -> fileOrigin.equals(g.getOrigin())).collect(Collectors.toList());
 			
 			mvc.addObject("galleryContent", gallerylist);
@@ -80,18 +81,19 @@ public class FileBankController {
 			boolean docCls=false;
 			
 			boolean recyleCls=false;
-			if(filesType.equals("ALL") && fileStatus==null)
-				allCls=true;
-			else if(filesType.equals("IMAGE"))
-				imgCls=true;
-			else if(filesType.equals("AUDIO"))
-				audCls=true;
-			else if(filesType.equals("VIDEO"))
-				vedCls=true;
-			else if(filesType.equals("DOCUMENT"))
+			if(StringUtils.isNotBlank(filesType)){
+				if(filesType.equals("ALL") && fileStatus==null)
+					allCls=true;
+				else if(filesType.equals("IMAGE"))
+					imgCls=true;
+				else if(filesType.equals("AUDIO"))
+					audCls=true;
+				else if(filesType.equals("VIDEO"))
+					vedCls=true;
+				else if(filesType.equals("DOCUMENT"))
 				docCls=true;
-			
-			if(fileStatus!=null && fileStatus.equals("DELETED"))
+			}
+			if(StringUtils.isNotBlank(fileStatus) && fileStatus.equals("DELETED"))
 				recyleCls=true;
 			
 			

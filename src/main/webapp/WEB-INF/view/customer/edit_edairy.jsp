@@ -35,10 +35,13 @@
  <form:form action="${contextPath}/sm/savePageContent"  id="savePageId" method="post" modelAttribute="eDairyPageDto">
  	<%-- <form:hidden path="${userId}"/>
  	<form:hidden path="${ dairyId}"/> --%>
- 	<input name="upload" type="button"	class="btn btn-primary uploadMultipleFiles1"  value="Uploadfiles" />
+ 	<!-- <input name="upload" type="button"	class="btn btn-primary uploadMultipleFiles1"  value="Upload Local Files" /> -->
+ 	<button class="btn btn-primary uploadMultipleFiles1">
+ 		<i class="fa fa-upload"></i> &nbsp;Local Files
+ 	</button>
  	<%-- <button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList?userid=${userid}" data-action="EDAIRY" class="fileBankWindowCls" style="margin-left: 50px;margin-top: -12px;"> --%>
- 	<button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList" data-action="EDAIRY" class="fileBankWindowCls" style="margin-left: 50px;margin-top: -12px;">
-		<img alt="File Bank" src="${contextPath}/resources/default/images/filebank.ico" style="width: 25px;"> File Bank
+ 	<button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList" data-action="EDAIRY" class="btn btn-primary" style="margin-left: 20px;margin-top: 0px;">
+		<i class="fa fa-upload"></i>&nbsp; File Bank
 	</button>
 	<textarea id="editor"  name="content" class="edairyContentCls">${dairyInfo.defaultPage.content}</textarea><br/>
 	<input type="hidden" name="dairyId" class="dairyId" value="${dairyId}">
