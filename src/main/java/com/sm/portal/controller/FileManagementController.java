@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,7 @@ import com.sm.portal.digilocker.model.DigiLockerAddressBar;
 import com.sm.portal.digilocker.model.DigiLockerEnum;
 import com.sm.portal.digilocker.model.FolderInfo;
 import com.sm.portal.digilocker.model.GalleryDetails;
+import com.sm.portal.digilocker.model.GallerySearchVo;
 import com.sm.portal.digilocker.service.DigilockerService;
 import com.sm.portal.digilocker.utils.DigiLockeUtils;
 import com.sm.portal.filters.ThreadLocalInfoContainer;
@@ -337,25 +339,23 @@ public class FileManagementController  extends CommonController{
 	
 	
 	@GetMapping(value="/getGallerContent")
-	public ModelAndView getGallerContent(@RequestParam(name="userid", required=false) Integer userid,Principal principal,
-			@RequestParam(name="filesType", required=false) String filesType,@RequestParam(name="fileStatus", required=false) String fileStatus,
-			@RequestParam(name="fileOrigin", required=false) String fileOrigin
-			,HttpServletRequest request){
+	public ModelAndView getGallerContent(@ModelAttribute(name="gallerySearchVo") GallerySearchVo gallerySearchVo,Principal principal,HttpServletRequest request){
 		ModelAndView mvc = new ModelAndView("/customer/gallery_content");
-		if(userid==null){
+		 Integer userid=null;
 			try{
 				userid=(Integer) (ThreadLocalInfoContainer.INFO_CONTAINER.get()).get("USER_ID");
 			}catch(Exception e){e.printStackTrace();}
-		}
+		
 		try {
-			if(filesType==null)
-				filesType="ALL";
-			List<GalleryDetails> gallerylist = digilockerService.getGallerContent(userid, filesType,fileStatus);
-			if(fileOrigin!=null)
-				gallerylist=gallerylist.stream().filter( g -> fileOrigin.equals(g.getOrigin())).collect(Collectors.toList());
+			if(gallerySearchVo.getFilesType()==null)
+				gallerySearchVo.setFilesType("ALL");
+			
+			List<GalleryDetails> gallerylist = digilockerService.getGallerContent(userid, gallerySearchVo.getFilesType(),gallerySearchVo.getFileStatus());
+			if(StringUtils.isNotBlank(gallerySearchVo.getFileOrigin()))
+				gallerylist=gallerylist.stream().filter( g -> gallerySearchVo.getFileOrigin().equals(g.getOrigin())).collect(Collectors.toList());
 			
 			mvc.addObject("galleryContent", gallerylist);
-			mvc.addObject("fileType", filesType);
+			mvc.addObject("fileType", gallerySearchVo.getFilesType());
 
 			boolean allCls=false;
 			boolean imgCls=false;
@@ -363,21 +363,23 @@ public class FileManagementController  extends CommonController{
 			boolean vedCls=false;
 			boolean docCls=false;
 			boolean recyleCls=false;
-			
-			if(filesType.equals("ALL") && fileStatus==null)
-				allCls=true;
-			else if(filesType.equals("IMAGE"))
-				imgCls=true;
-			else if(filesType.equals("AUDIO"))
-				audCls=true;
-			else if(filesType.equals("VIDEO"))
-				vedCls=true;
-			else if(filesType.equals("DOCUMENT"))
-				docCls=true;
-		 
-			if(fileStatus!=null && fileStatus.equals("DELETED"))
+			if(StringUtils.isNotBlank(gallerySearchVo.getFilesType())){
+				if(gallerySearchVo.getFilesType().equals("ALL") && gallerySearchVo.getFileStatus()==null)
+					allCls=true;
+				else if(gallerySearchVo.getFilesType().equals("IMAGE"))
+					imgCls=true;
+				else if(gallerySearchVo.getFilesType().equals("AUDIO"))
+					audCls=true;
+				else if(gallerySearchVo.getFilesType().equals("VIDEO"))
+					vedCls=true;
+				else if(gallerySearchVo.getFilesType().equals("DOCUMENT"))
+					docCls=true;
+			}
+			if(StringUtils.isNotBlank(gallerySearchVo.getFileStatus()) && gallerySearchVo.getFileStatus().equals("DELETED"))
 				recyleCls=true;
 			
+			if(gallerySearchVo.getFileOrigin()==null)
+				gallerySearchVo.setFileOrigin("ALL");
 			
 			mvc.addObject("allCls", allCls);
 			mvc.addObject("imgCls", imgCls);
@@ -385,12 +387,12 @@ public class FileManagementController  extends CommonController{
 			mvc.addObject("vedCls", vedCls);
 			mvc.addObject("docCls", docCls);
 			mvc.addObject("recyleCls", recyleCls);
-			
+			mvc.addObject("fileOrigin", gallerySearchVo.getFileOrigin());
 			mvc.addObject("userid", userid);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		if(fileOrigin==null)mvc.addObject("fileOrigin", DigiLockerEnum.LOCKER.toString());
+		if(gallerySearchVo.getFileOrigin()==null)mvc.addObject("fileOrigin", DigiLockerEnum.LOCKER.toString());
 		mvc.addObject("digiLockActive", true);
 		mvc.addObject("fileOriginList", DigiLockerEnum.values());
 		return mvc;

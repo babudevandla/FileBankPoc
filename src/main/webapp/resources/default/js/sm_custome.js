@@ -58,8 +58,22 @@ $(document).ready(function() {
 			event.preventDefault();
 			var	fileOrigin=$(this).val();
 			var	href=$(this).attr('data-href');
+			var	hiddenFileType=$("#hiddenFileType").val();
 			console.log(fileOrigin);
-			window.location.href=href+"?fileOrigin="+fileOrigin;
+			window.location.href=href+"?filesType="+hiddenFileType+"&fileOrigin="+fileOrigin;
+		});
+		
+		
+		$(".getGalleryContentFilter").click(function(){
+			var	fileOrigin=$("#fileOrigin").val();
+			var	href=$(this).attr('data-href');
+			var	filesType=$(this).attr('data-filesType');
+			console.log(href);
+			if(filesType!=null){
+				window.location.href=href+"?filesType="+filesType+"&fileOrigin="+fileOrigin;
+			}else{
+				window.location.href=href+"&fileOrigin="+fileOrigin;
+			}
 		});
 		
 		$('#fileBankWindow').click(function(event){

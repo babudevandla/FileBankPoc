@@ -57,7 +57,7 @@
               </div>
               </form>
              
-               	<a href="${contextPath}/sm/getGallerContent?userid=${userId}" class="btn btn-primary pull-right"><i class="fa fa-image" aria-hidden="true"></i> GALLERY</button></a>
+               	<a href="${contextPath}/sm/getGallerContent" class="btn btn-primary pull-right"><i class="fa fa-image" aria-hidden="true"></i> GALLERY</button></a>
             </div>
         </div>
       	 <%-- <button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList?userid=${userid}" class="fileBankWindowCls" >

@@ -54,31 +54,22 @@
             </div><br/><br/>
             <div class="col-md-12 col-sm-12">
             	<div class="col-md-3 col-sm-3" align="left" style="right: 45px;top: -10px;">
-            		<form:select name="fileOrigin" id="fileOrigin" data-href="${contextPath}/sm/getGallerContent">
-	             		<form:option value="ALL"> --- ALL ---</option>
-	             		<option value="LOCKER" >FILE BANK</option>
-	             		<option value="GALLERY">GALLERY</option>
-	             		<option value="EBOOK">E-BOOK</option>
-	             		<option value="EDAIRY">E-DAIRY</option>
-	             		
-	             		<%-- <core:forEach items="${fileOriginList}" var="origin">
-	             			 <core:choose>
-                                 <core:when test ="${fileOrigin eq  origin}">
-                                    <option value="${origin}">${origin}</option>
-                                 </core:when>
-                              </core:choose>
-                              <option value="${origin}">${origin}</option>
-                          </core:forEach>   --%>           		
-	             		
+            		<select name="fileOrigin" id="fileOrigin" data-href="${contextPath}/sm/getGallerContent">
+	             		<option value="" <c:if test="${fileOrigin eq 'ALL' }"> selected</c:if>> ---- ALL ----</option>
+		          		<option value="LOCKER" <c:if test="${fileOrigin eq 'LOCKER' }"> selected</c:if> >FILE BANK</option>
+		          		<option value="GALLERY" <c:if test="${fileOrigin eq 'GALLERY' }"> selected</c:if>>GALLERY</option>
+		          		<option value="E-BOOK" <c:if test="${fileOrigin eq 'E-BOOK' }"> selected</c:if>>E-BOOK</option>
+		          		<option value="E-DAIRY" <c:if test="${fileOrigin eq 'E-DAIRY' }"> selected</c:if>>E-DAIRY</option>
              		</select>
             	</div>
             	<div  class="col-md-9 col-sm-9" align="right" style="left: 103px;top: -18px;">
-	            	<a href="${contextPath}/sm/getGallerContent?userid=${userid}&filesType=ALL" class="${allCls?'btn active':''}"> ALL</a>  &nbsp; | &nbsp; &nbsp;
-	            	<a href="${contextPath}/sm/getGallerContent?userid=${userid}&filesType=IMAGE" class="${imgCls?'btn active':''}"><i class="fa fa-image" aria-hidden="true"></i> IMAGE</a>  &nbsp; &nbsp;|  &nbsp; &nbsp;
-	            	<a href="${contextPath}/sm/getGallerContent?userid=${userid}&filesType=AUDIO" class="${audCls?'btn active':''}"><i class="fa fa-file-audio-o" aria-hidden="true"></i> AUDIO</a>  &nbsp; &nbsp;|  &nbsp; &nbsp;
-	            	<a href="${contextPath}/sm/getGallerContent?userid=${userid}&filesType=VIDEO" class="${vedCls?'btn active':''}"><i class="fa fa-file-video-o" aria-hidden="true"></i> VIDEO</a>  &nbsp; &nbsp;|  &nbsp; &nbsp;
-		            <a href="${contextPath}/sm/getGallerContent?userid=${userid}&filesType=DOCUMENT" class="${docCls?'btn active':''}"><i class="fa fa-file-text" aria-hidden="true"></i> DOCUMENTS</a> &nbsp; &nbsp;|  &nbsp; &nbsp;
-		            <a href="${contextPath}/sm/getGallerContent?userid=${userid}&fileStatus=DELETED" class="${recyleCls?'btn active':''}"><img alt="" src="${contextPath}/resources/default/images/bin-blue-icon.png"> RECYCLE BIN</a>
+	            	<a data-href="${contextPath}/sm/getGallerContent" data-filesType="ALL" class="${allCls?'btn active':''} getGalleryContentFilter"> ALL</a>  &nbsp; | &nbsp; &nbsp;
+	            	<a data-href="${contextPath}/sm/getGallerContent" data-filesType="IMAGE"  class="${imgCls?'btn active':''} getGalleryContentFilter"><i class="fa fa-image" aria-hidden="true"></i> IMAGE</a>  &nbsp; &nbsp;|  &nbsp; &nbsp;
+	            	<a data-href="${contextPath}/sm/getGallerContent" data-filesType="AUDIO" class="${audCls?'btn active':''} getGalleryContentFilter"><i class="fa fa-file-audio-o" aria-hidden="true"></i> AUDIO</a>  &nbsp; &nbsp;|  &nbsp; &nbsp;
+	            	<a data-href="${contextPath}/sm/getGallerContent" data-filesType="VIDEO" class="${vedCls?'btn active':''} getGalleryContentFilter"><i class="fa fa-file-video-o" aria-hidden="true"></i> VIDEO</a>  &nbsp; &nbsp;|  &nbsp; &nbsp;
+		            <a data-href="${contextPath}/sm/getGallerContent" data-filesType="DOCUMENT" class="${docCls?'btn active':''} getGalleryContentFilter"><i class="fa fa-file-text" aria-hidden="true"></i> DOCUMENTS</a> &nbsp; &nbsp;|  &nbsp; &nbsp;
+		            <a data-href="${contextPath}/sm/getGallerContent?fileStatus=DELETED"  class="${recyleCls?'btn active':''} getGalleryContentFilter"><img alt="" src="${contextPath}/resources/default/images/bin-blue-icon.png"> RECYCLE BIN</a>
+            		<input type="hidden" value="${fileType}" id="hiddenFileType">
             	</div>
             </div>
         </div>

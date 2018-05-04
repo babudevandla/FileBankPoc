@@ -60,8 +60,8 @@ public class FileBankController {
 			}catch(Exception e){e.printStackTrace();}
 		}
 		try {
-			if(filesType==null)
-				filesType="ALL";
+			/*if(filesType==null)
+				filesType="ALL";*/
 			List<GalleryDetails> gallerylist = digilockerService.getGallerContent(userid, filesType,fileStatus);
 			if(fileOrigin!=null)
 				gallerylist=gallerylist.stream().filter( g -> fileOrigin.equals(g.getOrigin())).collect(Collectors.toList());
@@ -97,6 +97,7 @@ public class FileBankController {
 			mvc.addObject("vedCls", vedCls);
 			mvc.addObject("docCls", docCls);
 			mvc.addObject("recyleCls", recyleCls);
+			mvc.addObject("fileOrigin", fileOrigin);
 			
 			mvc.addObject("userid", userid);
 		} catch (ParseException e) {
