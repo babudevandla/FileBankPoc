@@ -49,7 +49,11 @@ public class FileBankController {
 	@GetMapping(value="/getFileBankList")
 	public ModelAndView getFileBankList(@RequestParam(name="userid", required=false) Integer userid,Principal principal,
 			@RequestParam(name="filesType", required=false) String filesType,@RequestParam(name="fileStatus", required=false) String fileStatus,
-			@RequestParam(name="fileOrigin", required=false) String fileOrigin
+			@RequestParam(name="fileOrigin", required=false) String fileOrigin,
+			@RequestParam(name="id", required=false) Integer id,
+			@RequestParam(name="content", required=false) String content,
+			@RequestParam(name="pageNo", required=false) Integer pageNo,
+			@RequestParam(name="actionType", required=false) String actionType
 			,HttpServletRequest request){
 		if (logger.isInfoEnabled())
 			logger.info("FileBankController ::: getFileBankList ::: Start ");
@@ -60,8 +64,8 @@ public class FileBankController {
 			}catch(Exception e){e.printStackTrace();}
 		}
 		try {
-			/*if(filesType==null)
-				filesType="ALL";*/
+			if(filesType==null)
+				filesType="ALL";
 			List<GalleryDetails> gallerylist = digilockerService.getGallerContent(userid, filesType,fileStatus);
 			if(fileOrigin!=null)
 				gallerylist=gallerylist.stream().filter( g -> fileOrigin.equals(g.getOrigin())).collect(Collectors.toList());
@@ -103,6 +107,12 @@ public class FileBankController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		FileBankCloudBean fbCloudBean = new FileBankCloudBean();
+		fbCloudBean.setId(id);
+		fbCloudBean.setPageNo(pageNo);
+		fbCloudBean.setContent(content);
+		fbCloudBean.setActionType(actionType);
+		mvc.addObject("fileBankCloudBean", fbCloudBean);
 		mvc.addObject("digiLockActive", true);
 		
 		if (logger.isInfoEnabled())

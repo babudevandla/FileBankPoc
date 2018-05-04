@@ -36,7 +36,8 @@
  	<%-- <form:hidden path="${userId}"/>
  	<form:hidden path="${ dairyId}"/> --%>
  	<input name="upload" type="button"	class="btn btn-primary uploadMultipleFiles1"  value="Uploadfiles" />
- 	<button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList?userid=${userid}" data-action="EDAIRY" class="fileBankWindowCls" style="margin-left: 50px;margin-top: -12px;">
+ 	<%-- <button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList?userid=${userid}" data-action="EDAIRY" class="fileBankWindowCls" style="margin-left: 50px;margin-top: -12px;"> --%>
+ 	<button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList" data-action="EDAIRY" class="fileBankWindowCls" style="margin-left: 50px;margin-top: -12px;">
 		<img alt="File Bank" src="${contextPath}/resources/default/images/filebank.ico" style="width: 25px;"> File Bank
 	</button>
 	<textarea id="editor"  name="content" class="edairyContentCls">${dairyInfo.defaultPage.content}</textarea><br/>

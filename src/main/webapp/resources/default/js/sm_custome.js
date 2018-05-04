@@ -78,8 +78,8 @@ $(document).ready(function() {
 		
 		$('#fileBankWindow').click(function(event){
 			event.preventDefault();
-			var	href=$(this).attr('data-href');
-			console.log(href);
+			var	href1=$(this).attr('data-href');
+			console.log(href1);
 			var	action=$(this).attr('data-action');
 			var id=null,content=null,pageNo=null;
 			if(action=="EBOOK"){
@@ -91,8 +91,9 @@ $(document).ready(function() {
 				 content=$(".edairyContentCls").val();
 				 pageNo=$("#pageNoId").html();
 			}
+			alert(content);
 			console.log("ID:"+id+"::PageNO:"+pageNo+"::Action:"+action);
-			
+			var href=href1+"?id="+id+"&content="+content+"&pageNo="+pageNo+"&actionType="+action;
 			
 			$.ajax({
 				url: href,
@@ -100,10 +101,10 @@ $(document).ready(function() {
 				cache: false,
 				success: function(data) {
 					$("#fileBankFilesList").html(data);
-					$(".fbCls").val(id);
+					/*$(".fbCls").val(id);
 					$(".contentCls").val(content);
 					$(".pageNoCls").val(pageNo);
-					$(".actionTypeCls").val(action);
+					$(".actionTypeCls").val(action);*/
 					$('#fileBankModelPopup').modal({
 			        	backdrop: 'static', 
 			        	keyboard: false,
@@ -117,6 +118,7 @@ $(document).ready(function() {
 	
 		$('#fileBankFilesUpload').click(function(event){
 			event.preventDefault();
+			alert($(".ebookContentCls").val());
 			var r=confirm(" Are you sure want to upload cloud files ");
 			if(r){
 				var size=$("[name='filePaths']:checked").length;
