@@ -39,7 +39,7 @@
 	 		<i class="fa fa-upload"></i> &nbsp;Local Files
 	 	</button>
 	 	<button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList" data-action="EBOOK" class="btn btn-primary" style="margin-left: 20px;margin-top: 0px;">
-			 <i class="fa fa-upload"></i>&nbsp; File Bank
+			 <i class="fa fa-upload"></i>&nbsp; Cloud Files
 		</button>
 		<textarea id="editor"  name="content" class="ebookContentCls">${eBook.defaultPage.content}</textarea><br/>
 		<input type="hidden" name="bookId" class="bookId" value="${eBook.bookId}">

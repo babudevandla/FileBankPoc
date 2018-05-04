@@ -111,6 +111,7 @@ body {
             <ul class="nav-news-feed">
               <li class="${digiLockActive?'active':''}"><i class="fa fa-dashboard"></i><div><a href="${contextPath}/sm/dashboard">Dashboard</a></div></li>
               <li class="${digiLockActive?'active':''}"><i class="icon ion-lock-combination"></i><div><a href="${contextPath}/sm/file_management">File Bank</a></div></li>
+              <li class="${digiLockActive?'active':''}"><i class="icon ion-lock-combination"></i><div><a href="${contextPath}/sm/getGallerContent">Gallery</a></div></li>
               <li class="${diaryActive?'active':''}"><i class="fa fa-calendar" aria-hidden="true"></i><div><a href="${contextPath}/sm/getUserDairiesList">My Dairies</a></div></li>
               <%-- <li class="${msgActive?'active':''}"><i class="icon ion-chatboxes"></i><div><a href="${contextPath}/sm/messanger">Messanger</a></div></li> --%>
               <li class="${galleryActive?'active':''}"><i class="fa fa-book" aria-hidden="true"></i><div><a href="${contextPath}/sm/eBooklist">My Books</a></div></li>

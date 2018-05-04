@@ -41,7 +41,7 @@
  	</button>
  	<%-- <button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList?userid=${userid}" data-action="EDAIRY" class="fileBankWindowCls" style="margin-left: 50px;margin-top: -12px;"> --%>
  	<button id="fileBankWindow" data-href="${contextPath}/sm/getFileBankList" data-action="EDAIRY" class="btn btn-primary" style="margin-left: 20px;margin-top: 0px;">
-		<i class="fa fa-upload"></i>&nbsp; File Bank
+		<i class="fa fa-upload"></i>&nbsp; Cloud Files
 	</button>
 	<textarea id="editor"  name="content" class="edairyContentCls">${dairyInfo.defaultPage.content}</textarea><br/>
 	<input type="hidden" name="dairyId" class="dairyId" value="${dairyId}">
