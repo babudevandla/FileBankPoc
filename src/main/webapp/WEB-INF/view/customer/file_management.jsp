@@ -283,6 +283,13 @@
 							                        <i class="fa fa-eye-slash fa-stack-1x fa-inverse"></i>
 							                      </span>
 							                    </a>
+							                    
+							                    <a data-href="${contextPath}/sm/moveFilesAndFolders?sourceFolderId=${folders.fId}&moveType=${FileAndFolderMoveEnum.FOLDER_MOVE}" id="moveFilesWindow" class="table-link moveFilesWindowClas">
+							                      <span class="fa-stack">
+							                        <i class="fa fa-square fa-stack-2x"></i>
+							                       <i class="fa fa-arrow-right  fa-stack-1x fa-inverse" aria-hidden="true"></i>
+							                      </span>
+							                    </a>
 							                </td>
 						                </tr>
 			                		</c:forEach>

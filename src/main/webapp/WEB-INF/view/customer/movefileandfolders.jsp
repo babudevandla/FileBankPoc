@@ -40,7 +40,11 @@
 							</thead>
 						</table>
 					</div>
-
+					<input type="hidden" name="sourceFolderId"  value="${moveFilesAndFoldersBean.sourceFolderId}"  class="sourceFolderIdCls">
+					<input type="hidden" name="sourceFileId" value='${moveFilesAndFoldersBean.sourceFileId }' class="sourceFileIdCls">
+					<input type="hidden" name="destinationFolderId" value="${moveFilesAndFoldersBean.destinationFolderId }" class="destinationFolderIdCls">
+					<input type="hidden" name="moveType" value="${moveFilesAndFoldersBean.moveType }" class="moveTypeCls" >
+					
 					<div class="table100-body js-pscroll">
 						<table>
 							<tbody>
@@ -49,7 +53,7 @@
 			                		<c:forEach items="${folderInfo.childFolders}" var="folders" varStatus="status">
 						                <tr class="row100 body">
 							                <td class="cell100 column1">
-							                	<a href="${contextPath}/sm/getfolderinfo/${folders.fId}" style="cursor: pointer;"	class="user-link">
+							                	<a href="${contextPath}/sm/getfolderinfowhilemoving?destinationFolderId=${folders.fId}" style="cursor: pointer;"	class="user-link getFolderInfoCls">
 							                		<strong style="color: black;" id="textellipse"><img alt="${folders.fName}" src="${contextPath}/resources/default/images/folder_PNG8773.png" style="width: 20px;"> &nbsp;${folders.fName} </strong>
 			                					</a>
 			                				</td>	
@@ -138,3 +142,33 @@
         </div>
      </div> 
      </div>
+     
+     <script type="text/javascript" >
+  
+  $('.getFolderInfoCls').on('click',function(event){
+		 event.preventDefault();
+		 alert("prakash");
+		 var href1=$(this).attr("href");
+		 var sourceFolderId=$(".sourceFolderIdCls").val();
+		 var sourceFileId=$(".sourceFileIdCls").val();
+		 var moveType=$(".moveTypeCls").val();
+		 var href;
+		
+		 href=encodeURI(href1+"&=sourceFolderId"+sourceFolderId+"&=sourceFileId"+sourceFileId+"&=moveType"+moveType);
+		 console.log(href);
+		 $.ajax({
+				url: href,
+				cache: false,
+				success: function(data) {
+					$("#moveFilesAndFoldersId").html(data);
+					 $('#fileAndFolderMoveModelPopup').modal({
+			        	backdrop: 'static', 
+			        	keyboard: false,
+			        	show:true,
+			        	height:'100%',
+			        	width:'100%'
+			        });
+				}
+			});
+		});
+  </script>  

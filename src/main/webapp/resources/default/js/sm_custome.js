@@ -158,13 +158,6 @@ $(document).ready(function() {
 		});
 		
 		
-		
-		
-		
-		
-		
-		
-		
 });
 
 
