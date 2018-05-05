@@ -174,7 +174,7 @@
                  <div class="modal-dialog modal-lg">
                    <div class="modal-content">
                    <button type="button" class="close" data-dismiss="modal" style="width: 30px;">&times;</button>
-                     <div class="post-content">
+                     <div class="post-content" style="height: 569px;">
                      <c:choose>
 					      <c:when test="${files.fileType eq 'IMAGE' }">
 	                       	<img src="${contextPath}${WebDav_Server_Url}?filePath=${files.filePath}" alt="post-image" class="img-responsive post-image" />
