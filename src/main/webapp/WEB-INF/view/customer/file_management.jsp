@@ -12,6 +12,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@taglib prefix="defaultTemplate" tagdir="/WEB-INF/tags"%>
+<%@ page import="com.sm.portal.digilocker.model.FileAndFolderMoveEnum" %>
 <link rel="stylesheet" type="text/css" href="${contextPath}/resources/default/css/util.css">
 <link rel="stylesheet" type="text/css" href="${contextPath}/resources/default/css/main.css">
 
@@ -348,7 +349,7 @@
 							                      </span>
 							                    </a>
 							                    
-							                    <a href="${contextPath}/sm/downloadFile/${folderInfo.fId}?filePath=${files.filePath}" class="table-link">
+							                    <a href="${contextPath}/sm/moveFilesAndFolders?sourceFolderId=${folderInfo.fId}&sourceFileId=${files.fileId}&moveType=${FileAndFolderMoveEnum.FILE_MOVE}" id="moveFilesWindow" class="table-link">
 							                      <span class="fa-stack">
 							                        <i class="fa fa-square fa-stack-2x"></i>
 							                       <i class="fa fa-arrow-right  fa-stack-1x fa-inverse" aria-hidden="true"></i>

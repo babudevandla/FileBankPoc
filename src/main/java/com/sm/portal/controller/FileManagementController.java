@@ -36,6 +36,7 @@ import com.sm.portal.digilocker.model.DigiLockerEnum;
 import com.sm.portal.digilocker.model.FolderInfo;
 import com.sm.portal.digilocker.model.GalleryDetails;
 import com.sm.portal.digilocker.model.GallerySearchVo;
+import com.sm.portal.digilocker.model.MoveFilesAndFoldersBean;
 import com.sm.portal.digilocker.service.DigilockerService;
 import com.sm.portal.digilocker.utils.DigiLockeUtils;
 import com.sm.portal.filters.ThreadLocalInfoContainer;
@@ -97,7 +98,7 @@ public class FileManagementController  extends CommonController{
 			mvc.addObject("digiLockerHomeData", rootFolderList);
 			List<FolderInfo> galleryData=rootFolderList.stream().filter(folder -> folder.origin.equals("GALLERY")).collect(Collectors.toList());
 			mvc.addObject("galleryData", galleryData);
-			System.out.println(user);	
+			System.out.println(user);
 			mvc.addObject("WEBDAV_SERVER_URL", WebDavServerConstant.WEBDAV_SERVER_URL);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -135,6 +136,33 @@ public class FileManagementController  extends CommonController{
 		
 		return mvc;
 	}//closing getDigiLockerHomeData() 
+	
+	@GetMapping(value="/moveFilesAndFolders")
+	public ModelAndView moveFilesAndFolders(@ModelAttribute MoveFilesAndFoldersBean moveFilesAndFoldersBean,HttpServletRequest request) {
+		
+		ModelAndView mav = new ModelAndView("/customer/movefileandfolders");
+		Integer userId =(Integer) (ThreadLocalInfoContainer.INFO_CONTAINER.get()).get("USER_ID");
+		try{
+			//Users user=userService.getUserById(userId);
+			List<FolderInfo>	allFolderList=digilockerService.getDigiLockerHomeData(new Long(userId));
+			
+			HttpSession httpSession=request.getSession(true);
+			httpSession.setAttribute("allFoldersData", allFolderList);
+			httpSession.setAttribute("userid", userId);
+			List<FolderInfo>	rootFolderList=digilockerService.getRootFoldersList(allFolderList);
+			mav.addObject("digiLockerHomeData", rootFolderList);
+			List<FolderInfo> galleryData=rootFolderList.stream().filter(folder -> folder.origin.equals("GALLERY")).collect(Collectors.toList());
+			mav.addObject("galleryData", galleryData);
+			System.out.println(user);
+			mav.addObject("WEBDAV_SERVER_URL", WebDavServerConstant.WEBDAV_SERVER_URL);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		//mvc.addObject("currentFolderPath", "home");
+		mav.addObject("digiLockActive", true);
+		
+		return mav;
+	}//moveFilesAndFolders() closing
 	
 	
 	@GetMapping(value="/downloadFile/{fid}")

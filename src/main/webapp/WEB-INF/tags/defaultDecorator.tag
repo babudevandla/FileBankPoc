@@ -109,7 +109,7 @@ body {
             	<a  class="text-white"><i class="fa fa-phone" aria-hidden="true"></i> ${user.mobile_no}</a>
             </div><!--profile card ends-->
             <ul class="nav-news-feed">
-              <li class="${digiLockActive?'active':''}"><i class="fa fa-dashboard"></i><div><a href="${contextPath}/sm/dashboard">Dashboard</a></div></li>
+             <%--  <li class="${digiLockActive?'active':''}"><i class="fa fa-dashboard"></i><div><a href="${contextPath}/sm/dashboard">Dashboard</a></div></li> --%>
               <li class="${digiLockActive?'active':''}"><i class="icon ion-lock-combination"></i><div><a href="${contextPath}/sm/file_management">File Bank</a></div></li>
               <li class="${digiLockActive?'active':''}"><i class="icon ion-lock-combination"></i><div><a href="${contextPath}/sm/getGallerContent">Gallery</a></div></li>
               <li class="${diaryActive?'active':''}"><i class="fa fa-calendar" aria-hidden="true"></i><div><a href="${contextPath}/sm/getUserDairiesList">My Dairies</a></div></li>
@@ -231,6 +231,30 @@ body {
       
     </div>
   </div>
+  
+  
+  <div class="modal fade" id="fileAndFolderMoveModelPopup" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content" style="width: 100%">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">File Bank</h4>
+        </div>
+        <div class="modal-body" >
+          <div id="moveFilesAndFoldersId" style=" margin-top: -15px"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="fileBankFilesUpload"  >Submit</button>
+            <button type="button" class="btn btn-primary"  data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  
+  
+  
 		
 		
     <!--preloader-->

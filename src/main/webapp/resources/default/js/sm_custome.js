@@ -129,6 +129,42 @@ $(document).ready(function() {
 			}
 		});	
 		
+		
+		
+		$('#moveFilesWindow').click(function(event){
+			event.preventDefault();
+			var	href=$(this).attr('data-href');
+			console.log(href);
+			
+			$.ajax({
+				url: href,
+				type:'GET',
+				cache: false,
+				success: function(data) {
+					$("#moveFilesAndFoldersId").html(data);
+					/*$(".fbCls").val(id);
+					$(".contentCls").val(content);
+					$(".pageNoCls").val(pageNo);
+					$(".actionTypeCls").val(action);*/
+					$('#fileAndFolderMoveModelPopup').modal({
+			        	backdrop: 'static', 
+			        	keyboard: false,
+			        	show:true,
+			        	height:'100%',
+			        	width:'100%'
+			        });
+				}
+			});
+		});
+		
+		
+		
+		
+		
+		
+		
+		
+		
 });
 
 
