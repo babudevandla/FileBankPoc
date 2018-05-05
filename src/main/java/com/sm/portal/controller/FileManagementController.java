@@ -160,11 +160,37 @@ public class FileManagementController  extends CommonController{
 		}
 		//mvc.addObject("currentFolderPath", "home");
 		mav.addObject("digiLockActive", true);
+		mav.addObject("moveFilesAndFoldersBean",moveFilesAndFoldersBean);
 		
 		return mav;
 	}//moveFilesAndFolders() closing
 	
-	
+	@GetMapping(value="/getfolderinfowhilemoving")
+	public ModelAndView getfolderinfowhilemoving(@ModelAttribute MoveFilesAndFoldersBean moveFilesAndFoldersBean,HttpServletRequest request){
+		logger.debug(" show fileManagement ...");
+		
+		ModelAndView mvc = new ModelAndView("/customer/file_management");
+		HttpSession httpSession=request.getSession(true);
+		@SuppressWarnings("unchecked")
+		List<FolderInfo> allFolderList =(List<FolderInfo>) httpSession.getAttribute("allFoldersData");
+		try{
+						
+			FolderInfo	folderInfo=digilockerService.getFolderInfo(allFolderList,moveFilesAndFoldersBean.getDestinationFolderId());
+			List<DigiLockerAddressBar> addressBar = this.getAddressBar(folderInfo, allFolderList);
+			mvc.addObject("folderInfo", folderInfo);
+			mvc.addObject("currentFolderPath", folderInfo.getFolderPath());
+			mvc.addObject("isInternalFolder", "Yes");
+			mvc.addObject("addressBar",addressBar);
+			
+			
+			//fileUploadServices.createFolderName(folderInfo.getFolderPath());
+			mvc.addObject("digiLockActive", true);
+			mvc.addObject("WEBDAV_SERVER_URL", WebDavServerConstant.WEBDAV_SERVER_URL);
+			//System.out.println(user);			
+		}catch(Exception e){e.printStackTrace();}
+		mvc.addObject("moveFilesAndFoldersBean",moveFilesAndFoldersBean);
+		return mvc;
+	}//closing getDigiLockerHomeData() 
 	@GetMapping(value="/downloadFile/{fid}")
 	public void downloadFile(@PathVariable Integer fid,@RequestParam String filePath,Principal principal,HttpServletRequest request
 			,HttpServletResponse response){
