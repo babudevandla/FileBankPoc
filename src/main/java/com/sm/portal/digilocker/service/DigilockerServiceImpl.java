@@ -18,6 +18,7 @@ import com.sm.portal.digilocker.model.DigiLockerStatusEnum;
 import com.sm.portal.digilocker.model.FilesInfo;
 import com.sm.portal.digilocker.model.FolderInfo;
 import com.sm.portal.digilocker.model.GalleryDetails;
+import com.sm.portal.digilocker.model.MoveFilesAndFoldersBean;
 import com.sm.portal.digilocker.mongo.dao.DigiLockerMongoDao;
 import com.sm.portal.digilocker.utils.DigiLockeUtils;
 import com.sm.portal.filters.ThreadLocalInfoContainer;
@@ -119,7 +120,7 @@ public class DigilockerServiceImpl implements DigilockerService{
 
 	@Override
 	public FolderInfo createNewFolder(Integer userid, String foldername, String currentFolderPath,
-			List<FolderInfo> allFolderList) {
+			List<FolderInfo> allFolderList, String isThisFolderForRootFiles) {
 
 		Integer currentFolderId=null;
 		int newFolderId=0;
@@ -140,6 +141,8 @@ public class DigilockerServiceImpl implements DigilockerService{
 		FolderInfo newFolder =new FolderInfo();
 		newFolder.setfId(++newFolderId);
 		newFolder.setfName(foldername);
+		newFolder.setIsThisFolderForRootFiles(isThisFolderForRootFiles);
+		
 		
 		if(currentFolderId==null) newFolder.setParentId(0);
 		else newFolder.setParentId(currentFolderId);
@@ -286,5 +289,17 @@ public class DigilockerServiceImpl implements DigilockerService{
 			return gallery;
 		}
 	}//checkAndCreateGalleryFolder() closing
+
+
+	@Override
+	public void moveFolderToAnothreFolder(Integer sourceFolderId, Integer destinationFolderParentId) {
+		digiLockerMongoDao.moveFolderToAnothreFolder(sourceFolderId, destinationFolderParentId);
+	}//moveFolderToAnothreFolder() closing
+
+
+	@Override
+	public void moveFileToAnotherFolder(MoveFilesAndFoldersBean moveFilesAndFoldersBean) {
+		digiLockerMongoDao.moveFileToAnotherFolder(moveFilesAndFoldersBean);
+	}
 
 }//class closing

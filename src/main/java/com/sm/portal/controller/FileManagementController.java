@@ -33,6 +33,7 @@ import com.sm.portal.constants.URLCONSTANT;
 import com.sm.portal.constants.WebDavServerConstant;
 import com.sm.portal.digilocker.model.DigiLockerAddressBar;
 import com.sm.portal.digilocker.model.DigiLockerEnum;
+import com.sm.portal.digilocker.model.FileAndFolderMoveEnum;
 import com.sm.portal.digilocker.model.FolderInfo;
 import com.sm.portal.digilocker.model.GalleryDetails;
 import com.sm.portal.digilocker.model.GallerySearchVo;
@@ -108,7 +109,7 @@ public class FileManagementController  extends CommonController{
 		return mvc;
 	}//closing getDigiLockerHomeData() 
 	
-	
+
 	
 	@GetMapping(value="/getfolderinfo/{fid}")
 	public ModelAndView getFolderInfo(@PathVariable Integer fid,Principal principal,HttpServletRequest request){
@@ -150,6 +151,14 @@ public class FileManagementController  extends CommonController{
 			httpSession.setAttribute("allFoldersData", allFolderList);
 			httpSession.setAttribute("userid", userId);
 			List<FolderInfo>	rootFolderList=digilockerService.getRootFoldersList(allFolderList);
+			if(moveFilesAndFoldersBean.getMoveType().toString().equals(FileAndFolderMoveEnum.FOLDER_MOVE.toString())){
+				for(FolderInfo folder:rootFolderList) {
+					if(folder.getFolderId().intValue()==moveFilesAndFoldersBean.getSourceFolderId().intValue()) {
+						folder.setFolderStatus("DISABLED");
+						break;//since only folder should be disabled as per the fundamental logic
+					}//if closing
+				}//for closing
+			}//if closing
 			mav.addObject("digiLockerHomeData", rootFolderList);
 			List<FolderInfo> galleryData=rootFolderList.stream().filter(folder -> folder.origin.equals("GALLERY")).collect(Collectors.toList());
 			mav.addObject("galleryData", galleryData);
@@ -169,20 +178,34 @@ public class FileManagementController  extends CommonController{
 	public ModelAndView getfolderinfowhilemoving(@ModelAttribute MoveFilesAndFoldersBean moveFilesAndFoldersBean,HttpServletRequest request){
 		logger.debug(" show fileManagement ...");
 		
-		ModelAndView mvc = new ModelAndView("/customer/file_management");
+		ModelAndView mvc = new ModelAndView("/customer/movefileandfolders");
 		HttpSession httpSession=request.getSession(true);
 		@SuppressWarnings("unchecked")
 		List<FolderInfo> allFolderList =(List<FolderInfo>) httpSession.getAttribute("allFoldersData");
 		try{
 						
+			if(moveFilesAndFoldersBean.getDestinationFolderId()==null || moveFilesAndFoldersBean.getDestinationFolderId().intValue()<0) {
+				moveFilesAndFoldersBean.setDestinationFolderParentId(0);
+				List<FolderInfo>	rootFolderList=digilockerService.getRootFoldersList(allFolderList);
+				mvc.addObject("digiLockerHomeData", rootFolderList);
+			}else {
 			FolderInfo	folderInfo=digilockerService.getFolderInfo(allFolderList,moveFilesAndFoldersBean.getDestinationFolderId());
+			
+			if(moveFilesAndFoldersBean.getMoveType().toString().equals(FileAndFolderMoveEnum.FOLDER_MOVE.toString())){
+				List<FolderInfo> childFolders = folderInfo.getChildFolders();
+				for(FolderInfo folder:childFolders) {
+					if(folder.getFolderId().intValue()==moveFilesAndFoldersBean.getSourceFolderId().intValue()) {
+						folder.setFolderStatus("DISABLED");
+						break;//since only folder should be disabled as per the fundamental logic
+					}//if closing
+				}//for closing
+			}//if closing
 			List<DigiLockerAddressBar> addressBar = this.getAddressBar(folderInfo, allFolderList);
 			mvc.addObject("folderInfo", folderInfo);
 			mvc.addObject("currentFolderPath", folderInfo.getFolderPath());
 			mvc.addObject("isInternalFolder", "Yes");
 			mvc.addObject("addressBar",addressBar);
-			
-			
+			}
 			//fileUploadServices.createFolderName(folderInfo.getFolderPath());
 			mvc.addObject("digiLockActive", true);
 			mvc.addObject("WEBDAV_SERVER_URL", WebDavServerConstant.WEBDAV_SERVER_URL);
@@ -191,6 +214,49 @@ public class FileManagementController  extends CommonController{
 		mvc.addObject("moveFilesAndFoldersBean",moveFilesAndFoldersBean);
 		return mvc;
 	}//closing getDigiLockerHomeData() 
+	
+	@GetMapping(value="/moveFileOrFolderSubmit")
+	public ModelAndView moveFileOrFolderSubmit(@ModelAttribute MoveFilesAndFoldersBean moveFilesAndFoldersBean,HttpServletRequest request) {
+		
+		if(moveFilesAndFoldersBean.getMoveType().toString().equals(FileAndFolderMoveEnum.FOLDER_MOVE.toString())) {
+			digilockerService.moveFolderToAnothreFolder(moveFilesAndFoldersBean.getSourceFolderId(), moveFilesAndFoldersBean.getDestinationFolderId());
+		}else if(moveFilesAndFoldersBean.getMoveType().toString().equals(FileAndFolderMoveEnum.FILE_MOVE.toString())) {
+			digilockerService.moveFileToAnotherFolder(moveFilesAndFoldersBean);
+		}
+		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("redirect:/sm/getUpdatedFodlerInfo?currentFolderId="+moveFilesAndFoldersBean.getDestinationFolderId());	
+		return mav;
+		
+	}//moveFileOrFolderSubmit() closing
+	
+	@GetMapping(value="getUpdatedFodlerInfo")
+	public ModelAndView getUpdatedFolderInfo(HttpServletRequest request,@RequestParam(name="currentFolderId",required=false) Integer currentFolderId) {
+		
+		ModelAndView mvc = new ModelAndView("/customer/file_management");
+		Integer userId = (Integer)ThreadLocalInfoContainer.INFO_CONTAINER.get().get("USER_ID");
+		List<FolderInfo>	allFolderList=digilockerService.getDigiLockerHomeData(new Long(userId));
+		
+		HttpSession httpSession=request.getSession(true);
+		httpSession.setAttribute("allFoldersData", allFolderList);
+		httpSession.setAttribute("userid", userId);
+		
+		FolderInfo	folderInfo=digilockerService.getFolderInfo(allFolderList,currentFolderId);
+		List<DigiLockerAddressBar> addressBar = this.getAddressBar(folderInfo, allFolderList);
+		mvc.addObject("folderInfo", folderInfo);
+		mvc.addObject("currentFolderPath", folderInfo.getFolderPath());
+		mvc.addObject("isInternalFolder", "Yes");
+		mvc.addObject("addressBar",addressBar);
+		
+		
+		//fileUploadServices.createFolderName(folderInfo.getFolderPath());
+		mvc.addObject("digiLockActive", true);
+		mvc.addObject("WEBDAV_SERVER_URL", WebDavServerConstant.WEBDAV_SERVER_URL);
+		
+		return mvc;
+	}//getUpdatedFolderInfo() closing
+	
+	
 	@GetMapping(value="/downloadFile/{fid}")
 	public void downloadFile(@PathVariable Integer fid,@RequestParam String filePath,Principal principal,HttpServletRequest request
 			,HttpServletResponse response){
@@ -243,7 +309,7 @@ public class FileManagementController  extends CommonController{
 		@SuppressWarnings("unchecked")
 		List<FolderInfo> allFolderList =(List<FolderInfo>) httpSession.getAttribute("allFoldersData");
 		
-		FolderInfo newFolder =digilockerService.createNewFolder(userid, foldername, currentFolderPath, allFolderList);
+		FolderInfo newFolder =digilockerService.createNewFolder(userid, foldername, currentFolderPath, allFolderList, "NO");
 		
 		
 		List<FolderInfo>	getUpdatedFolderList=digilockerService.getDigiLockerHomeData(new Long(userid));
@@ -254,7 +320,8 @@ public class FileManagementController  extends CommonController{
 		if(StringUtils.isNotBlank(currentFolderPath)){
 			mvc.setViewName("redirect:/sm/getfolderinfo/"+newFolder.getParentId());			
 		}else{
-			mvc.setViewName("redirect:/sm/file_management/"+userid);
+			//mvc.setViewName("redirect:/sm/file_management/"+userid);
+			mvc.setViewName("redirect:/sm/file_management");
 		}
 		return mvc;
 	}//createFolder() closing
@@ -264,9 +331,22 @@ public class FileManagementController  extends CommonController{
 			@RequestParam Integer folderId,Principal principal,
 			RedirectAttributes redirectAttributes, HttpServletRequest request){
 		logger.debug(" show fileManagement ...");
-		
+		boolean isUploadingAtRootFolder =false;
+		userid =(Integer) ThreadLocalInfoContainer.INFO_CONTAINER.get().get("USER_ID");
 		ModelAndView mvc = new ModelAndView();
 		//Users user=userService.findUserByUserName(principal.getName());
+		//########## below code is to upload files in filebank root folder###############
+		HttpSession httpSession=request.getSession(true);
+		@SuppressWarnings("unchecked")
+		List<FolderInfo> allFolderList =(List<FolderInfo>) httpSession.getAttribute("allFoldersData");
+		
+		if(folderPath==null || folderId==null) {
+			FolderInfo newfolder =digilockerService.createNewFolder(userid, "home", null,allFolderList,"YES");
+			folderPath =newfolder.getFolderPath();
+			folderId=newfolder.getFolderId();
+			isUploadingAtRootFolder=true;
+		}
+		//########## above code is to upload files in filebank root folder###############
 		String fileUrl=null;
 		for (int i=0;i<multipartList.length;i++) {	
             if (!multipartList[i].isEmpty()) {
@@ -275,16 +355,11 @@ public class FileManagementController  extends CommonController{
             		mvc.addObject("message","file uploaded successfully!");
             }
 		}
-		
-		
-		
-		List<FolderInfo>	allFolderList=digilockerService.getDigiLockerHomeData(new Long(userid));
-		
-		HttpSession httpSession=request.getSession(true);
+		allFolderList=digilockerService.getDigiLockerHomeData(new Long(userid));//getting updated data from database
 		httpSession.setAttribute("allFoldersData", allFolderList);
 		httpSession.setAttribute("userid", userid);
-		
-		mvc.setViewName("redirect:/sm/getfolderinfo/"+folderId);
+		if(isUploadingAtRootFolder) mvc.setViewName("redirect:/sm/file_management");
+		else mvc.setViewName("redirect:/sm/getfolderinfo/"+folderId);
 		System.out.println(user);
 		return mvc;
 	}//uploadFiles() closing

@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,7 @@ import com.sm.portal.digilocker.model.FilesInfo;
 import com.sm.portal.digilocker.model.FolderInfo;
 import com.sm.portal.digilocker.model.FolderInfoVo;
 import com.sm.portal.digilocker.model.GalleryDetails;
+import com.sm.portal.digilocker.model.MoveFilesAndFoldersBean;
 import com.sm.portal.filters.ThreadLocalInfoContainer;
 import com.sm.portal.mongo.MongoDBUtil;
 
@@ -76,6 +78,7 @@ public class DigiLockerMongoDao {
 				folderInfo.setFolderPath(folderDoc.getString("folderPath"));
 				folderInfo.setFolderNamePath(folderDoc.getString("folderNamePath"));
 				folderInfo.setFolderStatus(folderDoc.getString("folderStatus"));
+				folderInfo.setIsThisFolderForRootFiles(folderDoc.getString("isThisFolderForRootFiles"));
 				filesDocs = (List<Document>) folderDoc.get("files");
 				if(filesDocs!=null){
 					filesInfoList = new ArrayList<>();
@@ -210,6 +213,128 @@ public class DigiLockerMongoDao {
 			}//outer for closing
 		}
 	}//storeFileInfoInDB() closing
+	
+	public void moveFileToAnotherFolder(MoveFilesAndFoldersBean moveFilesAndFoldersBean) {
+		Integer userId =(Integer) ThreadLocalInfoContainer.INFO_CONTAINER.get().get("USER_ID");
+		MongoCollection<Document> coll = null;
+		coll = mongoDBUtil.getMongoCollection(CollectionsConstant.DIGILOCKER_MONGO_COLLETION);
+		Bson filter = Filters.eq("userId", userId);
+		FolderInfo sourceFolder =null;
+		FolderInfo updatedSourceFolder =null;
+		List<FilesInfo> updatedSourceFiles =new ArrayList();
+		FilesInfo updatedSourceFile=null;
+		FilesInfo sourceFileTemp = null;
+		FolderInfo destinationFolder=null;
+		FilesInfo sourceFile =null;
+		FindIterable<Document> folderInfoVos=coll.find(filter);	
+		if(null != folderInfoVos){
+			for (Document cur :  folderInfoVos ) {
+				FolderInfoVo folderInfoVo = gson.fromJson(cur.toJson(), FolderInfoVo.class);
+				List<FolderInfo> folderInfoList=folderInfoVo.getFoldersList();
+				
+				for(FolderInfo folderInfo :folderInfoList){//iterating one by one until identifying source and destination folders(it wont iterate all the folderes)
+					
+					if(destinationFolder==null && folderInfo.getfId().intValue()==moveFilesAndFoldersBean.getDestinationFolderId().intValue()){
+						destinationFolder =folderInfo;//identifying destination folder to put the selected file in to this
+					}
+					if(sourceFile==null && folderInfo.getfId().intValue()==moveFilesAndFoldersBean.getSourceFolderId().intValue()) {
+						
+						sourceFolder =folderInfo;//storing source folder addrers to remove it after the loop
+						
+						//creating new source folder by removing the moved file from the local file list
+						updatedSourceFolder =new FolderInfo();
+						updatedSourceFolder.setfId(folderInfo.getfId());
+						updatedSourceFolder.setFolderName(folderInfo.getFolderName());
+						updatedSourceFolder.setFolderPath(folderInfo.getFolderPath());
+						updatedSourceFolder.setParentId(folderInfo.getParentId());
+						updatedSourceFolder.setOrigin(folderInfo.getOrigin());
+						updatedSourceFolder.setFolderNamePath(folderInfo.getFolderNamePath());
+						updatedSourceFolder.setFolderStatus(folderInfo.getFolderStatus());
+						
+						
+						List<FilesInfo> fileList = folderInfo.getLocalFilesInfo();//all existing files in the source folder
+						for(FilesInfo fileInfo: fileList) {
+							sourceFileTemp=new FilesInfo();
+							if(sourceFile==null && fileInfo.getFileId().intValue()==moveFilesAndFoldersBean.getSourceFileId().intValue()) {
+								sourceFile =fileInfo;//source file to be moved to destination folder
+								//fileList.remove(fileInfo);//giving concurrent modification exception
+							}else {
+								//collecting all the files except moved file from the source folder local file list
+								updatedSourceFile =new FilesInfo();
+								updatedSourceFile.setFileId(fileInfo.getFileId());
+								updatedSourceFile.setFileName(fileInfo.getFileName());
+								updatedSourceFile.setDumy_filename(fileInfo.getDumy_filename());
+								updatedSourceFile.setFilePath(fileInfo.getFilePath());
+								updatedSourceFile.setFileStatus(fileInfo.getFileStatus());
+								updatedSourceFile.setFileType(fileInfo.getFileType());
+								updatedSourceFile.setCreateddate(fileInfo.getCreateddate());
+								updatedSourceFile.setUpdateddate(fileInfo.getUpdateddate());
+								updatedSourceFile.setStatusAtGallery(fileInfo.getStatusAtGallery());
+								updatedSourceFile.setFavoritePage(fileInfo.getFavoritePage());
+								updatedSourceFile.setFileExtension(fileInfo.getFileExtension());
+								
+								updatedSourceFiles.add(updatedSourceFile);//creating new local file list by removing the moved file in the source folder
+								
+							}
+						}//for closing
+						
+						updatedSourceFolder.setLocalFilesInfo(updatedSourceFiles);//new source folder after moved out the source file
+					}//if closing
+					if(sourceFile!=null && destinationFolder!=null) {
+						destinationFolder.getLocalFilesInfo().add(sourceFile);
+						break;//exiting after identifying the source and destination file and we already prepared the new source file by removing the moved file in the above loop
+					}
+				}//for closing
+				
+				folderInfoList.remove(sourceFolder);//removing the source folder object which contains the moved file still in source folder
+				folderInfoList.add(updatedSourceFolder);//adding the updated source folder which doesnt contains the moved file
+				String folderInfoVoJson = gson.toJson(folderInfoVo);
+				Document folderInfoVoJsonDoc = Document.parse(folderInfoVoJson);
+				coll.findOneAndUpdate(filter,new Document("$set", folderInfoVoJsonDoc),new FindOneAndUpdateOptions().upsert(true)) ;
+			}//for closing
+		}//if closing
+		
+	}//moveFileToAnotherFolder() closing
+	
+	public void moveFolderToAnothreFolder(Integer sourceFolderId, Integer destinationFolderParentId) {
+		Integer userId = (Integer) ThreadLocalInfoContainer.INFO_CONTAINER.get().get("USER_ID");
+		MongoCollection<Document> coll = null;
+		coll = mongoDBUtil.getMongoCollection(CollectionsConstant.DIGILOCKER_MONGO_COLLETION);
+		Bson filter = Filters.eq("userId", userId);
+		
+		FindIterable<Document> folderInfoVos=coll.find(filter);
+		int count=0;
+		for(Document cur : folderInfoVos){
+			count++;
+			break;
+		}
+		if(count==0){
+			Document userDigilockerDocument = new Document();
+			userDigilockerDocument.put("userId", userId);
+			userDigilockerDocument.put("foldersList", new ArrayList<Document>());
+			coll.insertOne(userDigilockerDocument);
+			folderInfoVos=coll.find(filter);
+		}
+		
+		if(null != folderInfoVos){
+			for (Document cur :  folderInfoVos ) {
+				FolderInfoVo folderInfoVo = gson.fromJson(cur.toJson(), FolderInfoVo.class);
+				List<FolderInfo> folderInfoList=folderInfoVo.getFoldersList();
+				for(FolderInfo folderInfo :folderInfoList){
+					if(folderInfo.getfId()==sourceFolderId.intValue()){
+						folderInfo.setParentId(destinationFolderParentId);
+					}
+				}//for closing
+				String folderInfoVoJson = gson.toJson(folderInfoVo);
+				Document folderInfoVoJsonDoc = Document.parse(folderInfoVoJson);
+				coll.findOneAndUpdate(filter,new Document("$set", folderInfoVoJsonDoc),new FindOneAndUpdateOptions().upsert(true)) ;
+				
+			}//outer for closing
+		}
+	}//storeFileInfoInDB() closing
+	
+	
+	
 	public void updateFileOrFolderSatus(String deleteInfo, String action,Integer folderId,Integer fildId, Integer userId) {
 		
 		MongoCollection<Document> coll = null;
@@ -483,5 +608,7 @@ public class DigiLockerMongoDao {
 		
 		return gallerFolder;
 	}//getGalleryDetails() closing
+
+		
 	
 }//class closing

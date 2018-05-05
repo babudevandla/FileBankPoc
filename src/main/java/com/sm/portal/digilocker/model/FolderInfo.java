@@ -14,6 +14,7 @@ public class FolderInfo  implements Serializable{
 	 public String origin;
 	 public String folderNamePath;
 	 public String folderStatus;
+	 private String isThisFolderForRootFiles;
 	 public List<FilesInfo> files;
 	 public List<FolderInfo> childFolders;
 	 
@@ -89,6 +90,13 @@ public class FolderInfo  implements Serializable{
 	public void setFiles(List<FilesInfo> files) {
 		this.files = files;
 	}
+	public String getIsThisFolderForRootFiles() {
+		return isThisFolderForRootFiles;
+	}
+	public void setIsThisFolderForRootFiles(String isThisFolderForRootFiles) {
+		this.isThisFolderForRootFiles = isThisFolderForRootFiles;
+	}
+	
 	 
 	 
 }
