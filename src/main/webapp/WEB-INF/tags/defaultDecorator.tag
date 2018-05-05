@@ -238,13 +238,13 @@ body {
       <div class="modal-content" style="width: 100%">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">File Bank</h4>
+          <h4 class="modal-title">Move Files</h4>
         </div>
         <div class="modal-body" >
           <div id="moveFilesAndFoldersId" style=" margin-top: -15px"></div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="fileBankFilesUpload"  >Submit</button>
+          <button type="button" class="btn btn-primary" id="fileBankFilesUpload"  >Move</button>
             <button type="button" class="btn btn-primary"  data-dismiss="modal">Cancel</button>
         </div>
       </div>

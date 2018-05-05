@@ -131,7 +131,7 @@ $(document).ready(function() {
 		
 		
 		
-		$('#moveFilesWindow').click(function(event){
+		$('.moveFilesWindowClas').click(function(event){
 			event.preventDefault();
 			var	href=$(this).attr('data-href');
 			console.log(href);
