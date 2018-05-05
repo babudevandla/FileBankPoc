@@ -230,8 +230,8 @@ th, td {
 [ Ver1 ]*/
 
 .table100.ver1 th {
-  font-family: Lato-Bold;
-  font-size: 18px;
+  font-family: unset;
+  font-size: 16px;
   color: #fff;
   line-height: 0.4;
 
@@ -239,7 +239,7 @@ th, td {
 }
 
 .table100.ver1 td {
-  font-family: Lato-Regular;
+  font-family: unset;
   font-size: 13px;
   color: #808080;
   line-height: 1.4;

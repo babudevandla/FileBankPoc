@@ -349,7 +349,7 @@
 							                      </span>
 							                    </a>
 							                    
-							                    <a href="${contextPath}/sm/moveFilesAndFolders?sourceFolderId=${folderInfo.fId}&sourceFileId=${files.fileId}&moveType=${FileAndFolderMoveEnum.FILE_MOVE}" id="moveFilesWindow" class="table-link">
+							                    <a data-href="${contextPath}/sm/moveFilesAndFolders?sourceFolderId=${folderInfo.fId}&sourceFileId=${files.fileId}&moveType=${FileAndFolderMoveEnum.FILE_MOVE}" id="moveFilesWindow" class="table-link">
 							                      <span class="fa-stack">
 							                        <i class="fa fa-square fa-stack-2x"></i>
 							                       <i class="fa fa-arrow-right  fa-stack-1x fa-inverse" aria-hidden="true"></i>
