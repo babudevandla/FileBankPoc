@@ -123,7 +123,7 @@
 			                	<c:otherwise>
 			                		 <c:forEach items="${digiLockerHomeData}" var="folders" varStatus="status">
 						                	<c:choose>
-						                		<c:when test="${(folders.origin eq 'LOCKER') && (not empty folders.fName) && (folders.isThisFolderForRootFiles eq 'NO')}">
+						                		<c:when test="${(folders.origin eq 'LOCKER') && (not empty folders.fName) && (folders.isThisFolderForRootFiles eq 'NO' || empty folders.isThisFolderForRootFiles)}">
 								                	<tr  class="row100 body">
 										                <td class="cell100 column1">
 										                <c:choose>
