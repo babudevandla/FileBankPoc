@@ -21,6 +21,11 @@ import com.sm.portal.constants.Email;
 import com.sm.portal.constants.MESSAGECONSTANT;
 import com.sm.portal.constants.SMSGateway;
 import com.sm.portal.constants.URLCONSTANT;
+import com.sm.portal.ebook.model.BookSearchDto;
+import com.sm.portal.ebook.model.UserBooks;
+import com.sm.portal.ebook.service.EbookServiceImpl;
+import com.sm.portal.edairy.model.UserDairies;
+import com.sm.portal.edairy.service.EdairyServiceImpl;
 import com.sm.portal.model.Users;
 import com.sm.portal.model.UsersDto;
 import com.sm.portal.service.FileUploadServices;
@@ -36,6 +41,12 @@ public class FrontendController extends CommonController{
 	
 	@Autowired
 	FileUploadServices fileUploadServices;
+	
+	@Autowired
+    private EbookServiceImpl ebookServiceImple;
+	
+	@Autowired
+	EdairyServiceImpl edairyServiceImpl;
 	
 	@PostMapping(value=URLCONSTANT.LOGIN_PAGE)
 	public ModelAndView loginSubmit(@ModelAttribute UsersDto usersDto , final RedirectAttributes redirectAttributes){
@@ -76,7 +87,13 @@ public class FrontendController extends CommonController{
 			Users user=userService.findUserByUserName(principal.getName());
 			model.addObject("user",user);
 			model.setViewName("customer/dashboard");
+			BookSearchDto searchDto=new BookSearchDto();
+			searchDto.setUserId(user.getUserId());
+			UserBooks userBooks = ebookServiceImple.getEbookListBySearch(searchDto);
+			UserDairies  userDairies=edairyServiceImpl.gerUserDairies(user.getUserId());
 			
+			model.addObject("booksSize",userBooks.getBooks().size());
+			model.addObject("dairysSize",userDairies.getDairyList().size());
 			//create userid folder under webdav
 			fileUploadServices.createDefaultUserIdFolder(user.getUserId());
 		} catch (Exception e) {

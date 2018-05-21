@@ -38,7 +38,7 @@
                        <div class="col-xs-7">
                            <div class="numbers">
                                <p>Total E-Dairys</p>
-                               2
+                                ${dairysSize}
                            </div>
                        </div>
                    </div>
@@ -63,7 +63,7 @@
                        <div class="col-xs-7">
                            <div class="numbers">
                                <p>Total EBooks</p>
-                               10
+                               ${booksSize}
                            </div>
                        </div>
                    </div>

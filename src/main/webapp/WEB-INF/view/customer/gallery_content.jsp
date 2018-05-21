@@ -37,7 +37,7 @@
             	<div class="form-group">
             		<button class="btn btn-primary pull-right">
                 		<!-- <i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;  --> 
-	                	<input type="file" name="files" multiple="multiple" />	
+	                	<input type="file" name="files" multiple="multiple" style="width: 100px;"/>	
 	                	<input type="hidden" name="userId" value="${userid}">
 	                	<input type="hidden" name="folderPath" value="${folderInfo.folderPath}">
 	                	<input type="hidden" name="folderId" value="${folderInfo.fId}">
@@ -174,7 +174,7 @@
                  <div class="modal-dialog modal-lg">
                    <div class="modal-content">
                    <button type="button" class="close" data-dismiss="modal" style="width: 30px;">&times;</button>
-                     <div class="post-content" style="height: 569px;">
+                     <div class="post-content">
                      <c:choose>
 					      <c:when test="${files.fileType eq 'IMAGE' }">
 	                       	<img src="${contextPath}${WebDav_Server_Url}?filePath=${files.filePath}" alt="post-image" class="img-responsive post-image" />

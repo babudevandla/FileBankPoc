@@ -19,11 +19,11 @@
  <form:form action="${contextPath}/sm/submit_edairy" method="post" commandName="dairyInfo">
 	<form:hidden path="userId" value="${userId }" />
         <div class="form-group col-xs-4">
-		<label>Dairy Name: </label>
+		<label>Dairy Name<span style="color: red;">*</span>: </label>
 		<form:input path="dairyName" id="dairyName" class="form-control"  maxlength="150" required="required"/></br>
 		</div>
 		<div class="form-group col-xs-4">
-		<label>Year:  </label>
+		<label>Year<span style="color: red;">*</span>:  </label>
 		<form:select path="year" id="yearId" class="form-control" >
               <c:forEach var="yearEnumVar"  items="${edairyYearsEnum}">
               		  <c:choose>

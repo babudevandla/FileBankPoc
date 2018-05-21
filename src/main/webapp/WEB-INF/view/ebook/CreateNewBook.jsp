@@ -22,7 +22,7 @@
 	
 		<form:hidden path="userId" />
 		 <div class="form-group col-xs-6">
-			<label>Book Name: </label>
+			<label>Book Name<span style="color: red;">*</span>: </label>
 			<form:input path="bookTitle" id="bookTitle" maxlength="150" class="form-control" required="required" />
 		</div>
 		 <div class="form-group col-xs-6">
@@ -30,16 +30,16 @@
 			<form:input path="tagline" id="tagline" maxlength="150" class="form-control" />
 		</div>
 		 <div class="form-group col-xs-3">
-			<label>Book Size: </label>
-			<form:select path="bookSize" id="bookSize" class="form-control" >
+			<label>Book Size<span style="color: red;">*</span>: </label>
+			<form:select path="bookSize" id="bookSize" class="form-control" required="required">
                 <c:forEach var="bookSizeVar"  items="${bookSizeEnumList}">
                    <form:option value="${bookSizeVar.bookSize}">${bookSizeVar.bookSize}</form:option>
                 </c:forEach>
    			</form:select>Pages per book
            </div>
             <div class="form-group col-xs-3">
-           <label>Page Size: </label>
-           <form:select path="pageSize" id="pageSize" class="form-control" >
+           <label>Page Size<span style="color: red;">*</span>: </label>
+           <form:select path="pageSize" id="pageSize" class="form-control" required="required">
                          <c:forEach var="pageSizeVar"  items="${pageSizeEnumList}">
                           <form:option value="${pageSizeVar.pageSize}">${pageSizeVar.pageSize}</form:option>
                          </c:forEach>

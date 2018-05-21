@@ -26,22 +26,22 @@
                   <input type="hidden" name="userId" value="${userId}">
                     <div class="row">
                       <div class="form-group col-xs-12">
-                        <label for="school">Current Password</label>
-                        <form:input id="oldpassword" class="form-control input-group-lg"  path="oldpassword" placeholder="Old Password" />
+                        <label for="school">Current Password <span style="color: red;">*</span></label>
+                        <form:input id="oldpassword" class="form-control input-group-lg"  path="oldpassword" placeholder="Old Password"  required="required" />
                       	<span style="color: red"><form:errors path="oldpassword" /></span>
                       </div>
                     </div>
                     <div class="row">
                       <div class="form-group col-xs-12">
-                        <label for="school">New Password</label>
-                        <form:input id="newpassword" class="form-control input-group-lg" path="password"  placeholder="New Password" />
+                        <label for="school">New Password <span style="color: red;">*</span></label>
+                        <form:input id="newpassword" class="form-control input-group-lg" path="password"  placeholder="New Password" required="required" />
                       	<span style="color: red"><form:errors path="password" /></span>
                       </div>
                     </div>
                     <div class="row">
                       <div class="form-group col-xs-12">
-                        <label for="school">Confirm Password</label>
-                        <form:input id="confirmpassword" class="form-control input-group-lg"  path="confirmpassword"  placeholder="Confirm Password" />
+                        <label for="school">Confirm Password <span style="color: red;">*</span></label>
+                        <form:input id="confirmpassword" class="form-control input-group-lg"  path="confirmpassword"  placeholder="Confirm Password" required="required" />
                      	<span style="color: red"><form:errors path="confirmpassword" /></span>
                       </div>
                     </div>
