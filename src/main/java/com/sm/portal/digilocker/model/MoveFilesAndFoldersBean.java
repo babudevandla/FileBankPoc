@@ -6,6 +6,7 @@ public class MoveFilesAndFoldersBean {
 	private Integer sourceFileId;
 	private Integer destinationFolderId;
 	private  FileAndFolderMoveEnum moveType;
+	private Integer destinationFolderParentId;
 	
 	
 	public Integer getSourceFolderId() {
@@ -31,6 +32,12 @@ public class MoveFilesAndFoldersBean {
 	}
 	public void setMoveType(FileAndFolderMoveEnum moveType) {
 		this.moveType = moveType;
+	}
+	public Integer getDestinationFolderParentId() {
+		return destinationFolderParentId;
+	}
+	public void setDestinationFolderParentId(Integer destinationFolderParentId) {
+		this.destinationFolderParentId = destinationFolderParentId;
 	}
 	
 	

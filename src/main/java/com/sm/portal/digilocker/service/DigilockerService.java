@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.sm.portal.digilocker.model.FilesInfo;
 import com.sm.portal.digilocker.model.FolderInfo;
 import com.sm.portal.digilocker.model.GalleryDetails;
+import com.sm.portal.digilocker.model.MoveFilesAndFoldersBean;
 import com.sm.portal.ebook.model.Ebook;
 
 public interface DigilockerService {
@@ -36,7 +37,7 @@ public interface DigilockerService {
 	public FolderInfo getGalleryDetails(String origin);
 
 	public FolderInfo createNewFolder(Integer userid, String foldername, String currentFolderPath,
-			List<FolderInfo> allFolderList);
+			List<FolderInfo> allFolderList, String isThisFolderForRootFiles);
 
 	public String uploadFiles(MultipartFile multipart, Integer userid, String folderPath, Integer folderId, HttpServletRequest request);
 
@@ -45,6 +46,10 @@ public interface DigilockerService {
 	public FolderInfo checkAndCreateGalleryFolder(String origin);
 
 	public void storeFilesInFileBank(MultipartFile multipart, String folderPath, Integer folderId);
+	
+	public void moveFolderToAnothreFolder(Integer sourceFolderId, Integer destinationFolderParentId);
+
+	public void moveFileToAnotherFolder(MoveFilesAndFoldersBean moveFilesAndFoldersBean);
 
 
 }

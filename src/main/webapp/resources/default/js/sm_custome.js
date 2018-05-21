@@ -157,14 +157,24 @@ $(document).ready(function() {
 			});
 		});
 		
-		
-		
-		
-		
-		
-		
-		
-		
+		$('#moveFileOrFolderSubmit').click(function(event){
+			event.preventDefault();
+			var href1=$(this).attr('data-href');
+			var sourceFolderId=$(".sourceFolderIdCls").val();
+			 var sourceFileId=$(".sourceFileIdCls").val();
+			 var destinationFolderId =$(".destinationFolderIdCls").val();			 
+			 var moveType=$(".moveTypeCls").val();
+			 var destinationFolderParentId =$(".destinationFolderParentIdCls").val();
+			 
+			 var href=href1+"?destinationFolderId="+destinationFolderId+"&sourceFolderId="+sourceFolderId+"&sourceFileId="+sourceFileId+"&moveType="+moveType+"&destinationFolderParentId="+destinationFolderParentId;
+			var r=confirm(" Are you sure want to move you are selected file or folder in to this location ");
+			if(r){
+				 	window.location.href=href;
+				 	
+				}else{
+					 alert('Need to change this information!');
+				}
+		});	
 });
 
 
