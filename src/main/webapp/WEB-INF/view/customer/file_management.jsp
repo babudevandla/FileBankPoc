@@ -1,4 +1,5 @@
 <%@ page import="com.sm.portal.constants.WebDavServerConstant" %>
+<%@ page import="com.sm.portal.digilocker.model.FileAndFolderMoveEnum" %>
 <% 
 	pageContext.setAttribute("Media_rul", WebDavServerConstant.MEDIA_URL);
 	pageContext.setAttribute("Media_rul2", WebDavServerConstant.MEDIA_URL2);
@@ -12,7 +13,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <%@taglib prefix="defaultTemplate" tagdir="/WEB-INF/tags"%>
-<%@ page import="com.sm.portal.digilocker.model.FileAndFolderMoveEnum" %>
+
 <link rel="stylesheet" type="text/css" href="${contextPath}/resources/default/css/util.css">
 <link rel="stylesheet" type="text/css" href="${contextPath}/resources/default/css/main.css">
 

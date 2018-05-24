@@ -139,6 +139,7 @@ public class EbookController {
 		}
 		mav.addObject("pagelist", gson.toJson(ebook.getEbookPages()));
 		mav.addObject("eBook", ebook);
+		mav.addObject("defaultPageNo", defaultPageNo);
 		return mav;
 	}//getEbookContent() closing
 	
