@@ -150,6 +150,8 @@
  #ebookPageContent{
     background-color: #FBF6F5;
     border-color: darkgrey;
+    padding-left: 24px !important;
+    padding-right: 18px !important;
 }  
  div#ebookPageContent {
     overflow-y: auto;
@@ -211,62 +213,45 @@
 		 <span style="font-size: 17px;float: right;font-weight: bold;color: slategray;font-family: sans-serif;"> ${eBook.bookTitle}</span>  
 		</div> --%>
 		<div class="main clearfix">
-		<c:choose>
+		<%-- <c:choose>
 	  		<c:when test="${not empty eBook.coverImage}">
 	  			<img src="${contextPath}${WebDavServerURL}?filePath=${eBook.coverImage}" alt="user" class="profile-photo-lg" style="border-radius:0px;height:52px;margin-left: -43px;"/>
 	  		</c:when>
 	  		<c:otherwise>
 	  			 <img src="${contextPath}/resources/default/images/Book_icon.png" alt="user" class="profile-photo-lg" style="border-radius:0px;height:52px;margin-left: -43px;"/>
 	  		</c:otherwise>
-	  	</c:choose>&nbsp;&nbsp;&nbsp;&nbsp;
-		<span style="font-size: 17px;;font-weight: bold;color: slategray;font-family: sans-serif;"> ${eBook.bookTitle}</span><br/><br/> 
+	  	</c:choose> --%>&nbsp;&nbsp;&nbsp;&nbsp;
+		 
+			<form action="${contextPath}/sm/getEbookContent" method="get" >
+		       	<div class="col-md-10 col-sm-10" style=" left: -49px;">
+		      		<input type="text"  name="defaultPageNo" class="form-control" placeholder="Search PageNo or ChapterName" value="${defaultPageNo}" style="height: 37px;">
+		      		<input type="hidden" name="userId"  value="${eBook.userId}">
+		      		<input type="hidden" name="bookId"  value="${eBook.bookId}">
+		      	</div>
+		      	 <div class="col-md-2 col-sm-2" style="left: -61px;">
+		      		<input type="submit" value="Search" class="btn btn-secondary" style="height: 37px;">
+		      	</div>	
+		      </form><br/><br/>
+		      	<span style="font-size: 17px;;font-weight: bold;color: slategray;font-family: sans-serif;float: right;"> ${eBook.bookTitle}</span><br/>
 			<div class="bb-custom-wrapper">
-				<!-- <nav style="left: 180px;">
-					<a id="bb-nav-first" href="#" class="bb-custom-icon bb-custom-icon-first">First page</a>
-					<a id="bb-nav-prev" href="#" class="bb-custom-icon bb-custom-icon-arrow-left">Previous</a>
-					<a id="bb-nav-next" href="#" class="bb-custom-icon bb-custom-icon-arrow-right">Next</a>
-					<a id="bb-nav-last" href="#" class="bb-custom-icon bb-custom-icon-last">Last page</a>
-				</nav><br/> -->
 				<div id="bb-bookblock" class="bb-bookblock" style="margin-left:-42px;">
 					<c:forEach items="${eBook.ebookPages}" var="pageContent">
-					<%-- <c:choose>
-						<c:when test="${not empty defaultPageNo}">
-							<div class="bb-item" id="ebookPageContent" style="visibility: visible; display: block;">
-								<div class="reader-header-left" style="width: 100%;">
-					                <h4 class="reader-name-inner" style="overflow-wrap: break-word;">
-					                    <a href="javascript:void(0);" title="Chapter Name" id="ebookPageDateId" itemprop="name" style="float: left; margin-left:10px; font-size: 14px; text-decoration:underline;"><span class="cptrName">${eBook.defaultPage.chapterName}</span>  </a> 
-					                    <span class="dedit-remote-json" data-pageNo="${eBook.defaultPage.pageNo}" style="float: left;margin-left: 5px;"><img src="${contextPath}/resources/default/images/edit.png" width="16"> </span>
-					                    <a  data-href="${pageContext.request.contextPath}/sm/editEbookContent?userId=${eBook.userId}&bookId=${eBook.bookId}&defaultPageNo=${eBook.defaultPage.pageNo}"  class="btn btn-warning pull-right editEbookIdCls" style="float: right;">
-						    				<i class="fa fa-edit"></i> EDIT
-						    			</a>
-						    			<div style="font-size: 14px;">
-						    			 Page : <span class="ebookPageNoCls" style="color: #337ab7">${eBook.defaultPage.pageNo} </span>&nbsp;&nbsp;&nbsp;
-						    			</div> 
-					                 </h4>
-					            </div>
-					            <hr>
-								<span class="pageContentCls">${eBook.defaultPage.content}</span>
-							</div>
-						</c:when>
-						<c:otherwise> --%>
-							<div class="bb-item" id="ebookPageContent" style="visibility: visible;padding-left: 24px !important;padding-right: 18px !important;">
-								<div class="reader-header-left" style="width: 100%;">
-					                <h4 class="reader-name-inner" style="overflow-wrap: break-word;">
-					                    <a href="javascript:void(0);" title="Chapter Name" id="ebookPageDateId" itemprop="name" style="float: left; font-size: 14px; text-decoration:underline;"><span id="cptrName">${pageContent.chapterName}</span>  </a> 
-					                    <span class="dedit-remote-json" data-pageNo="${pageContent.pageNo}" style="float: left;margin-left: 5px;"><img src="${contextPath}/resources/default/images/edit.png" width="16"> </span>
-					                    <a  data-href="${pageContext.request.contextPath}/sm/editEbookContent?userId=${eBook.userId}&bookId=${eBook.bookId}&defaultPageNo=${pageContent.pageNo}"  class="btn btn-warning pull-right editEbookIdCls" style="">
-						    				<i class="fa fa-edit"></i> EDIT
-						    			</a>
-						    			<div style="font-size: 14px;">
-						    			 Page : <span class="ebookPageNoCls" style="color: #337ab7;">${pageContent.pageNo} </span>&nbsp;&nbsp;&nbsp;
-						    			</div> 
-					                 </h4>
-					            </div>
-					            <hr>
-								<span class="pageContentCls" style="">${pageContent.content}</span>
-							</div>
-						<%-- </c:otherwise>
-						</c:choose> --%>
+						<div class="bb-item" id="ebookPageContent" style="visibility: visible;">
+							<div class="reader-header-left" style="width: 100%;">
+				                <h4 class="reader-name-inner" style="overflow-wrap: break-word;">
+				                    <a href="javascript:void(0);" title="Chapter Name" id="ebookPageDateId" itemprop="name" style="float: left; font-size: 14px; text-decoration:underline;"><span id="cptrName">${pageContent.chapterName}</span>  </a> 
+				                    <span class="dedit-remote-json" data-pageNo="${pageContent.pageNo}" style="float: left;margin-left: 5px;"><img src="${contextPath}/resources/default/images/edit.png" width="16"> </span>
+				                    <a  data-href="${pageContext.request.contextPath}/sm/editEbookContent?userId=${eBook.userId}&bookId=${eBook.bookId}&defaultPageNo=${pageContent.pageNo}"  class="btn btn-warning pull-right editEbookIdCls" style="">
+					    				<i class="fa fa-edit"></i> EDIT
+					    			</a>
+					    			<div style="font-size: 14px;">
+					    			 Page : <span class="ebookPageNoCls" style="color: #337ab7;">${pageContent.pageNo} </span>&nbsp;&nbsp;&nbsp;
+					    			</div> 
+				                 </h4>
+				            </div>
+				            <hr>
+							<span class="pageContentCls" style="">${pageContent.content}</span>
+						</div>
 					</c:forEach>
 				</div>
 				<nav style="left: 180px;">
@@ -281,7 +266,7 @@
 		
     </div>
 </div>
-
+<input type="hidden" id="defaultPN" value="${defaultPageNo}">
 <span style="display: none;" id="pageListCont">${pagelist}</span>
 
 <div class="modal fade" id="updateCptrName" role="dialog">

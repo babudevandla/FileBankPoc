@@ -8,10 +8,13 @@
  * Copyright 2013, Codrops
  * http://www.codrops.com
  */
+
 ;( function( $, window, undefined ) {
 
 	'use strict';
 
+	var defaultPageNo=$("#defaultPN").val();
+	console.log(defaultPageNo);
 	// global
 	var $window = $(window),
 		Modernizr = window.Modernizr;
@@ -84,7 +87,7 @@
 	// the options
 	$.BookBlock.defaults = {
 		// page to start on
-		startPage : 1,
+		startPage : (defaultPageNo != null && defaultPageNo!="") ? defaultPageNo : 1,
 		// vertical or horizontal flip
 		orientation : 'vertical',
 		// ltr (left to right) or rtl (right to left)

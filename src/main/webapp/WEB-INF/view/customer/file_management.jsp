@@ -45,7 +45,7 @@
             	<div class="form-group">
             	<button class="btn btn-primary pull-right">
                 		<!-- <i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;  --> 
-                	<input type="file" name="fileName" multiple="multiple"/>	
+                	<input type="file" name="fileName" multiple="multiple" style="width: 100px;"/>	
                 	<input type="hidden" name="userid" value="${userid}">
                 	<input type="hidden" name="folderPath" value="${folderInfo.folderPath}">
                 	<input type="hidden" name="folderId" value="${folderInfo.fId}">
