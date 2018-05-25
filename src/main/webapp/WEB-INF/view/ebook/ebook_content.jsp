@@ -239,7 +239,7 @@
 						<div class="bb-item" id="ebookPageContent" style="visibility: visible;">
 							<div class="reader-header-left" style="width: 100%;">
 				                <h4 class="reader-name-inner" style="overflow-wrap: break-word;">
-				                    <a href="javascript:void(0);" title="Chapter Name" id="ebookPageDateId" itemprop="name" style="float: left; font-size: 14px; text-decoration:underline;"><span id="cptrName">${pageContent.chapterName}</span>  </a> 
+				                    <a href="javascript:void(0);" title="Chapter Name" id="ebookPageDateId" itemprop="name" style="float: left; font-size: 14px; text-decoration:underline;"><span class="cptrName">${pageContent.chapterName}</span>  </a> 
 				                    <span class="dedit-remote-json" data-pageNo="${pageContent.pageNo}" style="float: left;margin-left: 5px;"><img src="${contextPath}/resources/default/images/edit.png" width="16"> </span>
 				                    <a  data-href="${pageContext.request.contextPath}/sm/editEbookContent?userId=${eBook.userId}&bookId=${eBook.bookId}&defaultPageNo=${pageContent.pageNo}"  class="btn btn-warning pull-right editEbookIdCls" style="">
 					    				<i class="fa fa-edit"></i> EDIT
