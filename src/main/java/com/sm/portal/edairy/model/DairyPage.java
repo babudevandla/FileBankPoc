@@ -9,6 +9,7 @@ public class DairyPage {
 	private Date date;
 	private String content;
 	private String pageStatus;
+	private boolean favouriteStatus;
 	
 	public int getPageNo() {
 		return pageNo;
@@ -40,6 +41,13 @@ public class DairyPage {
 	public void setPageStatus(String pageStatus) {
 		this.pageStatus = pageStatus;
 	}
+	public boolean isFavouriteStatus() {
+		return favouriteStatus;
+	}
+	public void setFavouriteStatus(boolean favouriteStatus) {
+		this.favouriteStatus = favouriteStatus;
+	}
+	
 	
 	
 }

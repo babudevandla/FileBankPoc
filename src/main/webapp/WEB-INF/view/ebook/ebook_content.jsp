@@ -148,10 +148,16 @@
 <style type="text/css">
 
  #ebookPageContent{
+   width: 100%;
     background-color: #FBF6F5;
+    padding-left: 15px;
     border-color: darkgrey;
-    padding-left: 24px !important;
-    padding-right: 18px !important;
+    /* color: black; */
+    border-style: solid;
+    border-top-width: 2px;
+    padding-top: 18px;
+    padding-left: 24px;
+    padding-right: 18px;
 }  
  div#ebookPageContent {
     overflow-y: auto;
@@ -221,9 +227,9 @@
 	  			 <img src="${contextPath}/resources/default/images/Book_icon.png" alt="user" class="profile-photo-lg" style="border-radius:0px;height:52px;margin-left: -43px;"/>
 	  		</c:otherwise>
 	  	</c:choose> --%>&nbsp;&nbsp;&nbsp;&nbsp;
-		 
+		 <button onclick="goBack()" style="margin-left:-62px;">Go Back </button><br/><br/>
 			<form action="${contextPath}/sm/getEbookContent" method="get" >
-		       	<div class="col-md-10 col-sm-10" style=" left: -49px;">
+		       	<div class="col-md-10 col-sm-10" style=" left: -56px;">
 		      		<input type="text"  name="defaultPageNo" class="form-control" placeholder="Search PageNo or ChapterName" value="${defaultPageNo}" style="height: 37px;">
 		      		<input type="hidden" name="userId"  value="${eBook.userId}">
 		      		<input type="hidden" name="bookId"  value="${eBook.bookId}">
@@ -249,7 +255,7 @@
 					    			</div> 
 				                 </h4>
 				            </div>
-				            <hr>
+				            <hr style="border-top: 2px solid grey;">
 							<span class="pageContentCls" style="">${pageContent.content}</span>
 						</div>
 					</c:forEach>
@@ -378,7 +384,11 @@
 	})();
 </script>
 <script>
-		Page.init();
+	Page.init();
+		
+ function goBack() {
+	    window.history.go(-1);
+	}	
 </script>   
 </jsp:body>
  </defaultTemplate:defaultDecorator>

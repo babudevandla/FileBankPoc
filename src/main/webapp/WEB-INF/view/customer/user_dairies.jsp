@@ -42,12 +42,12 @@
            <div class="row">
              <div class="col-md-3 col-sm-3">
               <%-- <a href="${contextPath}/sm/getUserDairyCoverPage/${userDairies.userId}/${dairy.dairyId}"> --%>
-              <a href="${contextPath}/sm/getDairyInfo/${userDairies.userId}/${dairy.dairyId}?actionBy=${EdairyActionEnum.TITLE_PAGE}&defaultPageNo=1">
+              <a href="${contextPath}/sm/getDairyInfo/${userDairies.userId}/${dairy.dairyId}?actionBy=${EdairyActionEnum.VIEW_PAGE}">
              	 <img src="${contextPath}/resources/default/images/diary_icon.png" alt="user" class="profile-photo-lg" style="border-radius:0px;"/>
               </a> 
              </div>
-             <div class="col-md-9 col-sm-9">
-             	<h5><a href="${contextPath}/sm/getUserDairyCoverPage/${userDairies.userId}/${dairy.dairyId}" class="profile-link">${dairy.name}</a></h5>
+             <div class="col-md-5 col-sm-5">
+             	<h5><a href="${contextPath}/sm/getDairyInfo/${userDairies.userId}/${dairy.dairyId}?actionBy=${EdairyActionEnum.VIEW_PAGE}" class="profile-link">${dairy.name}</a></h5>
                <p><f:formatDate value="${dairy.createdDate}" type="both"/> </p>
                <c:choose>
                		<c:when test="${dairy.status eq 'ACTIVE'}">
@@ -60,6 +60,11 @@
                			<span class="label label-danger">${dairy.status}</span>
                		</c:otherwise>
                </c:choose>
+             </div>
+             <div class="col-md-3 col-sm-3">
+             		<a href="${contextPath}/sm/getFavourateDairyInfo/${userDairies.userId}/${dairy.dairyId}?actionBy=${EdairyActionEnum.FAVORITE_PAGE}&favourate=true" class="btn btn-primary">
+						<i class="fa fa-heart" aria-hidden="true"></i> Select favorite Pages
+					</a>
              </div>
            </div>
          </div>

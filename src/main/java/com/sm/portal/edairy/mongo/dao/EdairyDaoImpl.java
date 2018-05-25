@@ -1,6 +1,7 @@
 package com.sm.portal.edairy.mongo.dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.google.gson.Gson;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -98,6 +100,8 @@ public class EdairyDaoImpl implements EdairyDao{
 				page.setDate(pageDoc.getDate("date"));
 				page.setContent(pageDoc.getString("content"));
 				page.setPageStatus(pageDoc.getString("pageStatus"));
+				page.setFavouriteStatus(pageDoc.getBoolean("favouriteStatus"));
+				
 				pageList.add(page);
 				
 			}//for closing
@@ -162,6 +166,70 @@ public class EdairyDaoImpl implements EdairyDao{
 		dairyInfoVoDoc.put("pages", pageDocList);
 		return dairyInfoVoDoc;
 	}//getEdairyDocument() closing
+
+	@Override
+	public void updateFavouritePage(Integer dairyId, Integer pageNo, boolean favourate,Integer userId) {
+		MongoCollection<Document> coll = null;
+		coll = mongoDBUtil.getMongoCollection(CollectionsConstant.EDAIRY);
+		Document match = new Document();
+		match.put("userId", userId);
+		match.put("dairyId", dairyId);
+		match.put("pages.pageNo", pageNo);
+		Document updateEbookDoc = new Document();
+		updateEbookDoc.put("pages.$.favouriteStatus", favourate);
+		
+		Document update = new Document();
+		update.put( "$set", updateEbookDoc);
+		
+		coll.updateOne( match, update );
+		
+	}
+
+	@Override
+	public DairyInfo getFavourateDairyInfo(Integer userId, Integer dairyId, boolean favourate, Integer defaultPageNo) {
+		DairyInfo dairyInfo =new DairyInfo();
+		AggregateIterable<Document> favourateAggregate=null;
+		
+		MongoCollection<Document> coll = mongoDBUtil.getMongoCollection(CollectionsConstant.EDAIRY);
+		Document match = new Document();
+		match.append("$match", new Document("userId", userId).append("dairyId", dairyId));
+		Document unwind1 = new Document();
+		unwind1.append("$unwind", "$pages");
+		Document matchFilter=new Document();
+		matchFilter.append("$match", new Document("pages.favouriteStatus", favourate));
+		
+		Document pageDoc =null;
+		List<DairyPage> pageList=new ArrayList<>();
+		DairyPage page =null;
+		
+		favourateAggregate=coll.aggregate(Arrays.asList(match,unwind1,matchFilter));
+		
+		if(null != favourateAggregate){
+			for (Document document :  favourateAggregate ) {
+				dairyInfo.setUserId(document.getInteger("userId"));
+				dairyInfo.setDairyId(document.getInteger("dairyId"));
+				dairyInfo.setDairyName(document.getString("dairyName"));
+				dairyInfo.setCoverImage(document.getString("coverImage"));
+				dairyInfo.setLastModifiedDate(document.getDate("lastModifiedDate"));
+				
+				pageDoc=(Document) document.get("pages");
+				page =new DairyPage();
+				page.setPageNo(pageDoc.getInteger("pageNo"));
+				page.setPageName(pageDoc.getString("pageName"));
+				page.setDate(pageDoc.getDate("date"));
+				page.setContent(pageDoc.getString("content"));
+				page.setPageStatus(pageDoc.getString("pageStatus"));
+				page.setFavouriteStatus(pageDoc.getBoolean("favouriteStatus"));
+				
+				pageList.add(page);
+				
+			}//close for loop
+			
+			dairyInfo.setPages(pageList);
+		}//close if condition
+		
+		return dairyInfo;
+	}
 	
 	
 	

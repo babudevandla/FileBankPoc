@@ -267,10 +267,10 @@ body {
  <script src="${contextPath}/resources/default/js/jquery-3.1.1.min.js"></script>
  <script src="${contextPath}/resources/default/js/bootstrap.min.js"></script>
  <script src="${contextPath}/resources/default/js/jquery.appear.min.js"></script>
-<script src="${contextPath}/resources/default/js/jquery.incremental-counter.js"></script>
+ <script src="${contextPath}/resources/default/js/jquery.incremental-counter.js"></script>
  <script src="${contextPath}/resources/default/js/script.js"></script>
  <script src="${contextPath}/resources/default/js/sm_custome.js"></script>
-
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
 <!--  TinyMCE plug-ins  -->
 <script src="${contextPath}/resources/default/tinymce/tinymce.min.js"></script>
 <script src="${contextPath}/resources/default/tinymce/plugins/compat3x/plugin.min.js"></script>

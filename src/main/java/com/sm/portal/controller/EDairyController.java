@@ -328,10 +328,10 @@ public class EDairyController {
 	public ModelAndView getDairyInfo(Principal principal, 
 						@PathVariable("userId") Integer userId,
 						@PathVariable("dairyId") Integer dairyId,
-						@RequestParam String actionBy,
-						@RequestParam(name="defaultPageNo", required=false) int defaultPageNo,
+						@RequestParam(name="actionBy", required=false) String actionBy,
+						@RequestParam(name="defaultPageNo", required=false) Integer defaultPageNo,
 						@RequestParam(name="edit", required=false) String goToEditPage){
-		logger.debug(" show user profile ...");
+		logger.debug(" show user getDairyInfo ...");
 		
 		Gson gson = new Gson();
 		ModelAndView mvc = null;
@@ -340,6 +340,7 @@ public class EDairyController {
 		}else{
 			mvc =new ModelAndView("/customer/dairy_content");
 		}
+		
 		
 		DairyInfo  dairyInfo=edairyServiceImpl.getDairyInfo(userId, dairyId,actionBy,defaultPageNo);
 		
@@ -350,6 +351,7 @@ public class EDairyController {
 		mvc.addObject("pages", dairyInfo.getPages());
 		mvc.addObject("pagelist", gson.toJson(dairyInfo.getPages()));
 		mvc.addObject("diaryActive", true);
+		mvc.addObject("defaultPageNo", defaultPageNo);
 		return mvc;
 	}//getUserDairiesList() closing
 	
@@ -401,5 +403,47 @@ public class EDairyController {
 	private Users getUserInfo(Principal principal){
 		return userService.findUserByUserName(principal.getName());
 	}//getUserInfo() closoing
+	
+	
+	@RequestMapping(value="/updateFavourite", method=RequestMethod.GET)
+	public ModelAndView updateFavourite(Principal principal, 
+			@RequestParam("dairyId") Integer dairyId, @RequestParam Integer pageNo,@RequestParam boolean favourate	){
+		
+		ModelAndView mvc = new ModelAndView("/customer/dairy_content");
+		Integer userId = (Integer)ThreadLocalInfoContainer.INFO_CONTAINER.get().get("USER_ID");
+		logger.info(" favourate ::"+favourate);
+		if(dairyId!=null && pageNo!=null){
+			edairyServiceImpl.updateFavouritePage(dairyId,pageNo,favourate,userId);
+		}
+		
+		mvc.setViewName("redirect:/sm/getDairyInfo/"+userId+"/"+dairyId+"?actionBy=&defaultPageNo="+pageNo);
+		return mvc;
+	}//getUserDairiesList() closing
+	
+	@RequestMapping(value="/getFavourateDairyInfo/{userId}/{dairyId}", method=RequestMethod.GET)
+	public ModelAndView getFavourateDairyInfo(Principal principal, 
+						@PathVariable("userId") Integer userId,
+						@PathVariable("dairyId") Integer dairyId,
+						@RequestParam(name="actionBy", required=false) String actionBy,
+						@RequestParam(name="defaultPageNo", required=false) Integer defaultPageNo,
+						@RequestParam(name="favourate") boolean favourate){
+		logger.debug(" show user getFavourateDairyInfo ...");
+		
+		Gson gson = new Gson();
+		ModelAndView mvc = null;
+		mvc =new ModelAndView("/customer/dairy_content");
+		
+		DairyInfo  dairyInfo=edairyServiceImpl.getFavourateDairyInfo(userId, dairyId,favourate,defaultPageNo);
+		
+		//mvc.addObject("showPageNo", 1);
+		mvc.addObject("userId", userId);
+		mvc.addObject("dairyId", dairyId);
+		mvc.addObject("dairyInfo", dairyInfo);
+		mvc.addObject("pages", dairyInfo.getPages());
+		mvc.addObject("pagelist", gson.toJson(dairyInfo.getPages()));
+		mvc.addObject("diaryActive", true);
+		mvc.addObject("defaultPageNo", defaultPageNo);
+		return mvc;
+	}//getUserDairiesList() closing
 	
 }

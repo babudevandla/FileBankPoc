@@ -181,6 +181,7 @@ public class EDairyMongoDao {
 	        edairyPageDoc.put("pageName", "");
 	        edairyPageDoc.put("content", "");
 	        edairyPageDoc.put("pageStatus", DigiLockerStatusEnum.ACTIVE.toString());
+	        edairyPageDoc.put("favouriteStatus", false);
 	        
 	        calendar.add(Calendar.DATE, 1);
 	        edairyPageDocs.add(edairyPageDoc);

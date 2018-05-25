@@ -20,54 +20,56 @@ import com.sm.portal.edairy.mongo.dao.EdairyDao;
 public class EdairyServiceImpl implements EdairyService{
 
 	@Autowired
-	private EdairyDao EdairyDaoImpl;
+	private EdairyDao edairyDaoImpl;
 	
 	@Override
 	public UserDairies gerUserDairies(int userId) {
-		return EdairyDaoImpl.gerUserDairies(userId);
+		return edairyDaoImpl.gerUserDairies(userId);
 	}
 
 	@Override
-	public DairyInfo getDairyInfo(int userId, int dairyId, String actionBy, int defaultPageNo) {
-		DairyInfo dairyInfo =EdairyDaoImpl.getDairyInfo(userId, dairyId);
+	public DairyInfo getDairyInfo(int userId, int dairyId, String actionBy, Integer defaultPageNo) {
+		DairyInfo dairyInfo =edairyDaoImpl.getDairyInfo(userId, dairyId);
 		List<DairyPage> pagesList =null;
 		DairyPage defaultPage = null;
 		if(dairyInfo!=null)pagesList =dairyInfo.getPages();
-		if(pagesList !=null && actionBy!=null){
-			if(actionBy.equals(EdairyActionEnum.TODAYS_PAGE.toString())){
-				defaultPage =pagesList.stream().filter(p->p.getDate().equals(new Date())).findFirst().orElse(new DairyPage());
-			}else if(actionBy.equals(EdairyActionEnum.LAST_UPDATD_DATE.toString())){
-				defaultPage =pagesList.stream().filter(p->p.getDate().equals(dairyInfo.getLastModifiedDate())).findFirst().orElse(new DairyPage());
-			}else if(actionBy.equals(EdairyActionEnum.SELECTED_DATE.toString())){
-				defaultPage =pagesList.stream().filter(p->p.getPageNo()==defaultPageNo).findFirst().orElse(new DairyPage());
-			}else if(actionBy.equals(EdairyActionEnum.FAVORITE_PAGE.toString())){
-				defaultPage =pagesList.stream().filter(p->p.getPageNo()==defaultPageNo).findFirst().orElse(new DairyPage());
-			}else if(actionBy.equals(EdairyActionEnum.TITLE_PAGE.toString())){
-				defaultPage =pagesList.stream().filter(p->p.getPageNo()==defaultPageNo).findFirst().orElse(new DairyPage());
-			}else if(actionBy.equals(EdairyActionEnum.EDIT_PAGE.toString())){
-				defaultPage =pagesList.stream().filter(p->p.getPageNo()==defaultPageNo).findFirst().orElse(new DairyPage());
-			}else if(actionBy.equals(EdairyActionEnum.VIEW_PAGE.toString())){
-				defaultPage =pagesList.stream().filter(p->p.getPageNo()==defaultPageNo).findFirst().orElse(new DairyPage());
-			}else{
-				defaultPage =pagesList.stream().filter(p->p.getPageNo()==defaultPageNo).findFirst().orElse(new DairyPage());
-			}
-			dairyInfo.setDefaultPage(defaultPage);
-		}//if closing
+		if(defaultPageNo!=null){
+			if(pagesList !=null && actionBy!=null){
+				if(actionBy.equals(EdairyActionEnum.TODAYS_PAGE.toString())){
+					defaultPage =pagesList.stream().filter(p->p.getDate().equals(new Date())).findFirst().orElse(new DairyPage());
+				}else if(actionBy.equals(EdairyActionEnum.LAST_UPDATD_DATE.toString())){
+					defaultPage =pagesList.stream().filter(p->p.getDate().equals(dairyInfo.getLastModifiedDate())).findFirst().orElse(new DairyPage());
+				}else if(actionBy.equals(EdairyActionEnum.SELECTED_DATE.toString())){
+					defaultPage =pagesList.stream().filter(p->p.getPageNo()==defaultPageNo).findFirst().orElse(new DairyPage());
+				}else if(actionBy.equals(EdairyActionEnum.FAVORITE_PAGE.toString())){
+					defaultPage =pagesList.stream().filter(p->p.getPageNo()==defaultPageNo).findFirst().orElse(new DairyPage());
+				}else if(actionBy.equals(EdairyActionEnum.TITLE_PAGE.toString())){
+					defaultPage =pagesList.stream().filter(p->p.getPageNo()==defaultPageNo).findFirst().orElse(new DairyPage());
+				}else if(actionBy.equals(EdairyActionEnum.EDIT_PAGE.toString())){
+					defaultPage =pagesList.stream().filter(p->p.getPageNo()==defaultPageNo).findFirst().orElse(new DairyPage());
+				}else if(actionBy.equals(EdairyActionEnum.VIEW_PAGE.toString())){
+					defaultPage =pagesList.stream().filter(p->p.getPageNo()==defaultPageNo).findFirst().orElse(new DairyPage());
+				}else{
+					defaultPage =pagesList.stream().filter(p->p.getPageNo()==defaultPageNo).findFirst().orElse(new DairyPage());
+				}
+				dairyInfo.setDefaultPage(defaultPage);
+			}//if closing
+		}
 		return dairyInfo;
 	}//getDairyInfo() closing
 
 	@Override
 	public DairyInfo editPageContent(int userId, int dairyId, DairyPage dairyPage) {
-		return EdairyDaoImpl.editPageContent(userId, dairyId, dairyPage);
+		return edairyDaoImpl.editPageContent(userId, dairyId, dairyPage);
 	}
 
 	@Override
 	public boolean savePageContent(int userId, int dairyId, DairyPage dairyPage) {
 
-		boolean result =EdairyDaoImpl.savePageContent(userId, dairyId, dairyPage);
+		boolean result =edairyDaoImpl.savePageContent(userId, dairyId, dairyPage);
 		return result;
 		//if(result)
-			//return EdairyDaoImpl.editPageContent(userId, dairyId, dairyPage);
+			//return edairyDaoImpl.editPageContent(userId, dairyId, dairyPage);
 	}
 
 	public String getContentAfterFileUpload(String pagecontent, List<String> fileUrlList) {
@@ -111,4 +113,12 @@ public class EdairyServiceImpl implements EdairyService{
 		}//if closing
 		return updatedList;
 	}//getAbsoluteUrls() closing
+
+	public void updateFavouritePage(Integer dairyId, Integer pageNo, boolean favourate, Integer userId) {
+		edairyDaoImpl.updateFavouritePage(dairyId,pageNo,favourate,userId);
+	}
+
+	public DairyInfo getFavourateDairyInfo(Integer userId, Integer dairyId, boolean favourate, Integer defaultPageNo) {
+		return edairyDaoImpl.getFavourateDairyInfo(userId,dairyId,favourate,defaultPageNo);
+	}
 }//class closing

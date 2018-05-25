@@ -175,6 +175,22 @@ $(document).ready(function() {
 					 alert('Need to change this information!');
 				}
 		});	
+		
+		//update favourate page
+		
+		/*$(".updateFavouratePage").click(function(event){
+			event.preventDefault();
+			var	href=$(this).attr('data-href');
+			$.ajax({
+				url: href,
+				type:'GET',
+				cache: false,
+				success: function(data) {
+					console.log(data);
+				}
+			});
+		});*/
+		
 });
 
 
