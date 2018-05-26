@@ -263,7 +263,7 @@ public class EDairyController {
 		}//for closing
 		if(fileUrlList.size()>0){
 			gallery.setLocalFilesInfo(newFileList);
-			digilockerService.storeNewFileOrFolderInfo(gallery, gallery.getFolderId(), userId);
+			digilockerService.storeFilesInGallery(gallery, gallery.getFolderId(), userId);
 			
 			String updatedPageContent =edairyServiceImpl.getContentAfterFileUpload(pagecontent, fileUrlList);
 			DairyPage page=new DairyPage();

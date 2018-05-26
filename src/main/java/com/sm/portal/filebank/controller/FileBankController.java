@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sm.portal.constants.URLCONSTANT;
 import com.sm.portal.digilocker.model.GalleryDetails;
+import com.sm.portal.digilocker.model.GallerySearchVo;
 import com.sm.portal.digilocker.service.DigilockerService;
 import com.sm.portal.ebook.model.EbookPageDto;
 import com.sm.portal.ebook.service.EbookServiceImpl;
@@ -67,7 +68,11 @@ public class FileBankController {
 		try {
 			if(filesType==null)
 				filesType="ALL";
-			List<GalleryDetails> gallerylist = digilockerService.getGallerContent(userid, filesType,fileStatus);
+			GallerySearchVo gallerySearchVo =new GallerySearchVo();
+			gallerySearchVo.setUserid(userid);
+			gallerySearchVo.setFilesType(filesType);
+			gallerySearchVo.setFileStatus(fileStatus);
+			List<GalleryDetails> gallerylist = digilockerService.getGallerContent(gallerySearchVo);
 			if(StringUtils.isNotBlank(fileOrigin))
 				gallerylist=gallerylist.stream().filter( g -> fileOrigin.equals(g.getOrigin())).collect(Collectors.toList());
 			

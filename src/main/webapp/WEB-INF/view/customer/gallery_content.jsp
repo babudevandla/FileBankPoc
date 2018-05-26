@@ -57,9 +57,9 @@
             		<select name="fileOrigin" id="fileOrigin" data-href="${contextPath}/sm/getGallerContent">
 	             		<option value="" <c:if test="${fileOrigin eq 'ALL' }"> selected</c:if>> ---- ALL ----</option>
 		          		<option value="LOCKER" <c:if test="${fileOrigin eq 'LOCKER' }"> selected</c:if> >FILE BANK</option>
-		          		<option value="GALLERY" <c:if test="${fileOrigin eq 'GALLERY' }"> selected</c:if>>GALLERY</option>
-		          		<option value="E-BOOK" <c:if test="${fileOrigin eq 'E-BOOK' }"> selected</c:if>>E-BOOK</option>
-		          		<option value="E-DAIRY" <c:if test="${fileOrigin eq 'E-DAIRY' }"> selected</c:if>>E-DAIRY</option>
+		          		<%-- <option value="GALLERY" <c:if test="${fileOrigin eq 'GALLERY' }"> selected</c:if>>GALLERY</option> --%>
+		          		<option value="EBOOK" <c:if test="${fileOrigin eq 'E-BOOK' }"> selected</c:if>>E-BOOK</option>
+		          		<option value="EDAIRY" <c:if test="${fileOrigin eq 'E-DAIRY' }"> selected</c:if>>E-DAIRY</option>
              		</select>
             	</div>
             	<div  class="col-md-9 col-sm-9" align="right" style="left: 103px;top: -18px;">

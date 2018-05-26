@@ -18,6 +18,7 @@ import com.sm.portal.digilocker.model.DigiLockerStatusEnum;
 import com.sm.portal.digilocker.model.FilesInfo;
 import com.sm.portal.digilocker.model.FolderInfo;
 import com.sm.portal.digilocker.model.GalleryDetails;
+import com.sm.portal.digilocker.model.GallerySearchVo;
 import com.sm.portal.digilocker.model.MoveFilesAndFoldersBean;
 import com.sm.portal.digilocker.mongo.dao.DigiLockerMongoDao;
 import com.sm.portal.digilocker.utils.DigiLockeUtils;
@@ -47,7 +48,7 @@ public class DigilockerServiceImpl implements DigilockerService{
 	
 	@Override
 	public List<FolderInfo> getDigiLockerHomeData(Long userId) {
-		List<FolderInfo> folderList =digiLockerMongoDao.getFolderInfo(userId);
+		List<FolderInfo> folderList =digiLockerMongoDao.getFolderInfo2(userId);
 		return folderList;
 	}//getDigiLockerHomeData() closing
 
@@ -75,11 +76,12 @@ public class DigilockerServiceImpl implements DigilockerService{
 
 	@Override
 	public void storeNewFileOrFolderInfo(FolderInfo newFolderInfo, Integer folderId, Integer userId) {
-		digiLockerMongoDao.storeNewFileOrFolderInfo(newFolderInfo,folderId, userId);
+		digiLockerMongoDao.storeNewFolder(newFolderInfo,folderId, userId);
 	}//storeFileInfoInDB() closing
 	@Override
-	public void storeFilesInGallery(FolderInfo newFolderInfo, Integer userId){
-		digiLockerMongoDao.storeFilesInGallery(newFolderInfo, userId);
+	public void storeFilesInGallery(FolderInfo newFolderInfo, Integer folderId, Integer userId){
+		digiLockerMongoDao.storeNewFiles(newFolderInfo, newFolderInfo.getFolderId(),userId);
+		
 	}//storeFilesInGallery() closing
 	
 	@Override
@@ -95,20 +97,11 @@ public class DigilockerServiceImpl implements DigilockerService{
 
 
 	@Override
-	public void storeFolderInfo(List<FolderInfo> folderlist, Integer userId) {
-		digiLockerMongoDao.storeFolderInfo(folderlist,userId);	
-	}
-
-
-	@Override
-	public List<GalleryDetails> getGallerContent(Integer userid, String filesType,String fileStatus) throws ParseException {
-
-		List<GalleryDetails> galleryContent = digiLockerMongoDao.getGallerContent(userid, filesType,fileStatus);
-		
+	public List<GalleryDetails> getGallerContent(GallerySearchVo gallerySearchVo) throws ParseException{
+		List<GalleryDetails> galleryContent = digiLockerMongoDao.getGallerContent(gallerySearchVo);		
 		return galleryContent;
-	}//getGallerContent() closing
-
-
+	}
+	
 	@Override
 	public FolderInfo getGalleryDetails(String origin) {
 
@@ -159,8 +152,8 @@ public class DigilockerServiceImpl implements DigilockerService{
 		newFolder.setChildFolders(null);
 		newFolder.setLocalFilesInfo(null);
 		newFolder.setOrigin(DigiLockerEnum.LOCKER.toString());
-		digilockerService.storeNewFileOrFolderInfo(newFolder, new Integer(""+newFolder.getfId()), userid);
-		
+		//digilockerService.storeNewFileOrFolderInfo(newFolder, new Integer(""+newFolder.getfId()), userid);
+		digilockerService.storeNewFolderInfo(newFolder, new Integer(""+newFolder.getfId()), userid);
 		return newFolder;
 	}//createNewFolder() closing
 
@@ -187,6 +180,7 @@ public class DigilockerServiceImpl implements DigilockerService{
 		
 		
 		FilesInfo newFileInfo = new FilesInfo();
+		newFileInfo.setFolderId(folderId);
 		newFileInfo.setFileId(++fileUniqueKey);
 		newFileInfo.setFileName(fileName);
 		newFileInfo.setDumy_filename(fileName.replaceAll(" ", "_"));
@@ -202,8 +196,8 @@ public class DigilockerServiceImpl implements DigilockerService{
 		localFilesInfo.add(newFileInfo);
 		newFolder.setLocalFilesInfo(localFilesInfo);
 		
-		digilockerService.storeNewFileOrFolderInfo(newFolder, folderId, userId);
-		
+		//digilockerService.storeNewFileOrFolderInfo(newFolder, folderId, userId);
+		digiLockerMongoDao.storeNewFiles(newFolder, folderId, userId);
 		
 		
 	}//storeFilesInFileBank() cloisng
@@ -293,13 +287,63 @@ public class DigilockerServiceImpl implements DigilockerService{
 
 	@Override
 	public void moveFolderToAnothreFolder(Integer sourceFolderId, Integer destinationFolderParentId) {
-		digiLockerMongoDao.moveFolderToAnothreFolder(sourceFolderId, destinationFolderParentId);
+		digiLockerMongoDao.moveFolderToAnothreFolder2(sourceFolderId, destinationFolderParentId);
 	}//moveFolderToAnothreFolder() closing
 
 
 	@Override
 	public void moveFileToAnotherFolder(MoveFilesAndFoldersBean moveFilesAndFoldersBean) {
-		digiLockerMongoDao.moveFileToAnotherFolder(moveFilesAndFoldersBean);
+		digiLockerMongoDao.moveFileToAnotherFolder2(moveFilesAndFoldersBean);
+	}
+
+
+	@Override
+	public void storeNewFolderInfo(FolderInfo FolderInfo, Integer folderId, Integer userid) {
+		digiLockerMongoDao.storeNewFolder(FolderInfo, folderId, userid);
+		
+	}
+
+
+
+
+	@Override
+	public List<FolderInfo> getRootFoldersList() {
+		List<FolderInfo> rootFolders =digiLockerMongoDao.getRootFoldersList(0);
+		for(FolderInfo rf :rootFolders) {
+			if(rf.getIsThisFolderForRootFiles().equals("YES")) {
+				List<FilesInfo> fileList = digiLockerMongoDao.getFileListOfFolder(rf.getFolderId());
+				rf.setFiles(fileList);
+				break;
+			}
+				
+		}
+		
+		return rootFolders;
+	}
+	
+	@Override
+	public List<FolderInfo> getChildFolders(int parentFolderId){
+		return digiLockerMongoDao.getRootFoldersList(parentFolderId);
+	}
+
+
+	@Override
+	public FolderInfo getFolderInfo(Integer currentFolderId) {
+		FolderInfo currentFolderInfo =new FolderInfo();
+		List<FolderInfo> childFolders =digiLockerMongoDao.getRootFoldersList(currentFolderId);
+		List<FilesInfo> fileList = digiLockerMongoDao.getFileListOfFolder(currentFolderId);
+		currentFolderInfo.setChildFolders(childFolders);
+		currentFolderInfo.setFiles(fileList);
+		return currentFolderInfo;
+	}//getFolderInfo() closing
+	@Override
+	public List<FolderInfo> getAllFolders(){
+		
+		return digiLockerMongoDao.getAllFolders();
+	}
+	@Override
+	public FolderInfo getFolderInfoForRootFiles() {
+		return digiLockerMongoDao.getFolderInfoForRootFiles();
 	}
 
 }//class closing

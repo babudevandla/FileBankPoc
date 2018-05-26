@@ -26,7 +26,9 @@ public class GalleryDetails implements Serializable {
 	 private Boolean favoritePage;
 	 private String fileExtension;
 	 
-	 
+	public GalleryDetails() {
+		
+	}
 	public String getFolderName() {
 		return folderName;
 	}

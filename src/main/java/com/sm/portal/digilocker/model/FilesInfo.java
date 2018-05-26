@@ -7,6 +7,7 @@ public class FilesInfo implements Serializable {
 
 	 private static final long serialVersionUID = 1L;
 	 public Integer fileId;
+	 private Integer folderId;
 	 public String fileName;
 	 private String dumy_filename;
 	 public String filePath;
@@ -83,6 +84,12 @@ public class FilesInfo implements Serializable {
 	}
 	public void setFileExtension(String fileExtension) {
 		this.fileExtension = fileExtension;
+	}
+	public Integer getFolderId() {
+		return folderId;
+	}
+	public void setFolderId(Integer folderId) {
+		this.folderId = folderId;
 	}
 	
 }

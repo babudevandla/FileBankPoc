@@ -7,6 +7,7 @@ public class FolderInfo  implements Serializable{
 
 	
 	private static final long serialVersionUID = 1L;
+	private Integer userId;
 	public String folderName;
 	 public Integer folderId;
 	 public String folderPath;
@@ -95,6 +96,12 @@ public class FolderInfo  implements Serializable{
 	}
 	public void setIsThisFolderForRootFiles(String isThisFolderForRootFiles) {
 		this.isThisFolderForRootFiles = isThisFolderForRootFiles;
+	}
+	public Integer getUserId() {
+		return userId;
+	}
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 	
 	 

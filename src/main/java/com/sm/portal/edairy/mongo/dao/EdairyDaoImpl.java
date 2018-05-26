@@ -100,7 +100,7 @@ public class EdairyDaoImpl implements EdairyDao{
 				page.setDate(pageDoc.getDate("date"));
 				page.setContent(pageDoc.getString("content"));
 				page.setPageStatus(pageDoc.getString("pageStatus"));
-				page.setFavouriteStatus(pageDoc.getBoolean("favouriteStatus"));
+				page.setFavouriteStatus((pageDoc.getBoolean("favouriteStatus")==null?false:true));
 				
 				pageList.add(page);
 				
